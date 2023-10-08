@@ -1,8 +1,9 @@
 package org.example.comics;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class ComicsLegacy extends Comics {
+public class ComicsLegacy extends Comics implements Serializable {
     private Comics legacy;
 
     public ComicsLegacy(){

@@ -2,9 +2,11 @@ package org.example.comics;
 
 import sun.util.resources.LocaleData;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
-public class Comics {
+public class Comics implements Serializable {
     protected String author;
     protected String designer;
     protected String name;
@@ -113,5 +115,18 @@ public class Comics {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comics comics = (Comics) o;
+        return pages == comics.pages && Double.compare(costPrice, comics.costPrice) == 0 && Double.compare(price, comics.price) == 0 && Objects.equals(author, comics.author) && Objects.equals(designer, comics.designer) && Objects.equals(name, comics.name) && Objects.equals(publicationDate, comics.publicationDate) && Objects.equals(publishingHouse, comics.publishingHouse) && Objects.equals(genre, comics.genre);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(author, designer, name, publicationDate, pages, publishingHouse, genre, costPrice, price);
     }
 }
