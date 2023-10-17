@@ -6,7 +6,9 @@ public class MenuOptions {
         this.options = String.format(   "1. Добавить комикс" +
                                         "\n2. Удалить комикс" +
                                         "\n3. Показать список комиксов" +
-                                        "\n4. Сохранить");
+                                        "\n4. Сохранить" +
+                                        "\n5. Создать комикс" +
+                                        "\n0. Выход");
     }
     @Override
     public String toString() {

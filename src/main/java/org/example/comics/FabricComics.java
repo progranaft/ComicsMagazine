@@ -40,7 +40,7 @@ public class FabricComics implements Serializable {
                 return null;
             } else if (choice == 1) {
                 System.out.println("Введите название предистории или \"назад\" для отмены:");
-                String str = new String();
+                String str;
                 Scanner scan = new Scanner(System.in);
                 str = scan.nextLine();
                 if (str.equals("назад")) {
@@ -91,7 +91,23 @@ public class FabricComics implements Serializable {
         comics.setCostPrice(Double.parseDouble(scan.nextLine()));
         System.out.println("Введите цену продажи:");
         comics.setPrice(Double.parseDouble(scan.nextLine()));
+        comicsSet.add(comics);
         return comics;
+    }
+
+    public HashSet<Comics> getComicsSet(){
+        return this.comicsSet;
+    }
+
+    public Comics checkComics(String str){
+        Comics cms = null;
+        for (Comics comic:this.comicsSet){
+            if (comic.getName().equals(str)){
+                cms = comic;
+                break;
+            }
+        }
+        return cms;
     }
     public Comics getAvengers(){
         Comics avengrs = new Comics("Стэн Ли", "Джек Кирби", "Avengers", LocalDate.of(1963, 9, 1), 150, "Marvel Comics", "Fantastic", 10, 30);

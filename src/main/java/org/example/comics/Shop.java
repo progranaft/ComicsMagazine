@@ -23,10 +23,22 @@ public class Shop implements Serializable {
     }
 
     public void deleteComics(String name) {
+        int index = -1;
         for (int i = 0; i < this.comics.size(); i++) {
             if (this.comics.get(i).getName().equals(name)) {
-
+                index = i;
+                break;
             }
         }
+        if (index > -1) {
+            this.comics.remove(index);
+            System.out.println("Комикс удален");
+        } else {
+            System.out.println("Комикс не найден");
+        }
+    }
+
+    public void changeComics() {
+
     }
 }

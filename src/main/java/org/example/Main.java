@@ -1,9 +1,8 @@
 package org.example;
 
-import org.example.comics.Comics;
-import org.example.comics.ComicsShopLive;
-import org.example.comics.Menu;
-import org.example.comics.MenuOptions;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import org.example.comics.*;
 
 import java.util.HashSet;
 
