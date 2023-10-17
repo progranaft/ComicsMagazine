@@ -37,7 +37,7 @@ public class ComicsShopLive {
             System.out.println("Создан новый магазин");
         }
 
-        Menu menu = new Menu(new MenuOptions());
+        Menu menu = new Menu(new MainMenu());
 
         while (true) {
             Integer choice = menu.showMenu();
@@ -62,15 +62,28 @@ public class ComicsShopLive {
             } else if (choice == 4) {
                 this.save();
             } else if (choice == 5) {
-                Comics comics = fc.createComics();
-                Scanner in = new Scanner(System.in);
-                System.out.println("Добавить комикс в магазин?\n1. Да\n2. Нет");
-                int input = in.nextInt();
-                if (input == 1) {
-                    if (comics != null) {
-                        shop.addComics(comics);
+                Menu fabricMenu = new Menu(new FabricMenu());
+                while (true) {
+                    Integer choice2 = fabricMenu.showMenu();
+                    if (choice2 == 1) {
+                        Comics comics = fc.createComics();
+                        Scanner in = new Scanner(System.in);
+                        System.out.println("Добавить комикс в магазин?\n1. Да\n2. Нет");
+                        int input = in.nextInt();
+                        if (input == 1) {
+                            if (comics != null) {
+                                shop.addComics(comics);
+                            }
+                        }
+                    } else if (choice2 == 2) {
+
+                    } else if (choice2 == 3) {
+                        System.out.println(fc.showComics());
+                    } else if (choice2 == 0) {
+                        break;
                     }
                 }
+
             } else if (choice == 0) {
                 System.out.println("Сохранить?\n1. Да\n2. Нет");
                 Scanner in = new Scanner(System.in);

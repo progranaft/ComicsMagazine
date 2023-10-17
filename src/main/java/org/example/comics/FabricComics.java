@@ -95,6 +95,14 @@ public class FabricComics implements Serializable {
         return comics;
     }
 
+    public String showComics(){
+        StringBuilder str = new StringBuilder();
+        for (Comics comic:this.comicsSet) {
+            str.append(comic.toString()).append("\n");
+        }
+        return str.toString();
+    }
+
     public HashSet<Comics> getComicsSet(){
         return this.comicsSet;
     }

@@ -1,13 +1,13 @@
 package org.example.comics;
 
-public class MenuOptions {
+public class MainMenu {
     protected String options;
-    public MenuOptions(){
+    public MainMenu(){
         this.options = String.format(   "1. Добавить комикс" +
                                         "\n2. Удалить комикс" +
                                         "\n3. Показать список комиксов" +
                                         "\n4. Сохранить" +
-                                        "\n5. Создать комикс" +
+                                        "\n5. Фабрика комиксов" +
                                         "\n0. Выход");
     }
     @Override
