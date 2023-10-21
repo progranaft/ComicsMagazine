@@ -67,12 +67,14 @@ public class ComicsShopLive {
                     Integer choice2 = fabricMenu.showMenu();
                     if (choice2 == 1) {
                         Comics comics = fc.createComics();
-                        Scanner in = new Scanner(System.in);
-                        System.out.println("Добавить комикс в магазин?\n1. Да\n2. Нет");
-                        int input = in.nextInt();
-                        if (input == 1) {
-                            if (comics != null) {
-                                shop.addComics(comics);
+                        if (comics != null) {
+                            Scanner in = new Scanner(System.in);
+                            Menu addInMagazine = new Menu(()->"Добавить комикс в магазин?\n1. Да\n2. Нет");
+                            Integer input = addInMagazine.showMenu();
+                            if (input == 1) {
+                                if (comics != null) {
+                                    shop.addComics(comics);
+                                }
                             }
                         }
                     } else if (choice2 == 2) {
