@@ -4,7 +4,7 @@ public class FabricMenu extends MainMenu{
     protected String options;
     public FabricMenu(){
         this.options = String.format(   "1. Создать комикс" +
-                                        "\n2. Удалить комикс из редакции" +
+                                        "\n2. Удалить комикс из фабрики" +
                                         "\n3. Показать список комиксов" +
                                         "\n0. Выход");
     }

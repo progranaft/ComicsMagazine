@@ -83,7 +83,14 @@ public class ComicsShopLive {
                         break;
                     }
                 }
-
+            } else if (choice == 6) {
+                System.out.println("Введите название/автора/жанр комикса");
+                Scanner input = new Scanner(System.in);
+                String str = input.nextLine();
+                System.out.println(shop.searchComics(str));
+                System.out.println("Для продолжения введите любой символ");
+                str = input.nextLine();
+                continue;
             } else if (choice == 0) {
                 System.out.println("Сохранить?\n1. Да\n2. Нет");
                 Scanner in = new Scanner(System.in);
