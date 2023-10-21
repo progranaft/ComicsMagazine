@@ -113,6 +113,12 @@ public class FabricComics implements Serializable {
         }
         return cms;
     }
+
+    public void changeComics(){
+
+    }
+
+
 //    public Comics getAvengers(){
 //        Comics avengrs = new Comics("Стэн Ли", "Джек Кирби", "Avengers", LocalDate.of(1963, 9, 1), 150, "Marvel Comics", "Fantastic", 10, 30);
 //        this.comicsSet.add(avengrs);

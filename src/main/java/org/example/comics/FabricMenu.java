@@ -1,15 +1,13 @@
 package org.example.comics;
 
-public class FabricMenu extends MainMenu{
-    protected String options;
-    public FabricMenu(){
-        this.options = String.format(   "1. Создать комикс" +
-                                        "\n2. Удалить комикс из фабрики" +
-                                        "\n3. Показать список комиксов" +
-                                        "\n0. Выход");
-    }
+public class FabricMenu implements ShowMenu{
     @Override
-    public String toString() {
-        return this.options;
+    public String showMenuOptions() {
+        String str =    "1. Создать комикс" +
+                        "\n2. Удалить комикс из фабрики" +
+                        "\n3. Показать список комиксов" +
+                        "\n4. Редактировать параметры комикса" +
+                        "\n0. Выход";
+        return str;
     }
 }

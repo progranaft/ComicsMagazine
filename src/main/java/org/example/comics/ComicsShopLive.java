@@ -79,6 +79,10 @@ public class ComicsShopLive {
 
                     } else if (choice2 == 3) {
                         System.out.println(fc.showComics());
+                    } else if (choice2 == 4) {
+                        Menu changeComicsMenu = new Menu(new ChangeComicsMenu());
+
+
                     } else if (choice2 == 0) {
                         break;
                     }
@@ -92,9 +96,14 @@ public class ComicsShopLive {
                 str = input.nextLine();
                 continue;
             } else if (choice == 0) {
-                System.out.println("Сохранить?\n1. Да\n2. Нет");
-                Scanner in = new Scanner(System.in);
-                int input = in.nextInt();
+//                Menu exitMenu = new Menu(new ShowMenu() {
+//                    @Override
+//                    public String showMenuOptions() {
+//                        return "Сохранить?\n1. Да\n2. Нет";
+//                    }
+//                });
+                Menu exitMenu = new Menu(()->"Сохранить?\n1. Да\n2. Нет");
+                Integer input = exitMenu.showMenu();
                 if (input == 1) {
                     this.save();
                     break;

@@ -3,9 +3,9 @@ package org.example.comics;
 import java.util.Scanner;
 
 public class Menu {
-    protected MainMenu mainMenu;
-    public Menu(MainMenu options){
-        this.mainMenu = options;
+    protected String mainMenu;
+    public Menu(ShowMenu options){
+        this.mainMenu = options.showMenuOptions();
     }
     public Integer showMenu(){
         Integer choice = null;
