@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Shop implements Serializable {
-    protected HashMap<Comics, Integer> comicsHashMap;
+    protected HashMap<Comics, ComicsData> comicsHashMap;
 
     public Shop(){
         this.comicsHashMap = new HashMap<>();
@@ -17,35 +17,45 @@ public class Shop implements Serializable {
 
     public void addComics(Comics comics){
         if (comicsHashMap.containsKey(comics)) {
-            Integer tmp = comicsHashMap.get(comics);
-            tmp++;
-            comicsHashMap.put(comics, tmp);
+            Integer tmp = comicsHashMap.get(comics).getQuantity();
+            Scanner input = new Scanner(System.in);
+            tmp += input.nextInt();
+            comicsHashMap.get(comics).setQuantity(tmp);
         } else {
-            comicsHashMap.put(comics, 1);
+            Scanner input = new Scanner(System.in);
+            System.out.println("Введите цену закупки: ");
+            Double coastPrice = input.nextDouble();
+            System.out.println("введите цену продажи: ");
+            Double price = input.nextDouble();
+            System.out.println("Введите ID продукта: ");
+            Long id = input.nextLong();
+            System.out.println("Введите количество: ");
+            Integer quan = input.nextInt();
+            comicsHashMap.put(comics, new ComicsData(quan ,LocalDate.now(), coastPrice, price, id));
         }
     }
 
     public String showComicsList() {
         StringBuilder str = new StringBuilder();
-        for (Map.Entry<Comics, Integer> comic:comicsHashMap.entrySet()) {
-            str.append(comic.getKey().toString()).append(" Количество: ").append(comic.getValue()).append("\n");
+        for (Map.Entry<Comics, ComicsData> comic:comicsHashMap.entrySet()) {
+            str.append(comic.getKey().toString()).append(comic.getValue().toString()).append("\n");
         }
         return str.toString();
     }
 
     public void deleteComics(String name) {
         Comics comics = null;
-        for (Map.Entry<Comics, Integer> comic : comicsHashMap.entrySet()) {
+        for (Map.Entry<Comics, ComicsData> comic : comicsHashMap.entrySet()) {
             if (comic.getKey().getName().equals(name)) {
                 comics = comic.getKey();
                 break;
             }
         }
         if (comics != null) {
-            if (comicsHashMap.get(comics) > 1) {
-                Integer tmp = comicsHashMap.get(comics);
+            if (comicsHashMap.get(comics).getQuantity() > 1) {
+                Integer tmp = comicsHashMap.get(comics).getQuantity();
                 tmp--;
-                comicsHashMap.put(comics, tmp);
+                comicsHashMap.get(comics).setQuantity(tmp);
             } else {
                 comicsHashMap.remove(comics);
             }
@@ -55,49 +65,43 @@ public class Shop implements Serializable {
         }
     }
 
-    public HashMap<Comics, Integer> searchComicsName(String name){
-        //ArrayList<Comics> comicsList = new ArrayList<>();
-        HashMap<Comics, Integer> comicsList = new HashMap<>();
-        for (Map.Entry<Comics, Integer> comics : comicsHashMap.entrySet()){
+    public HashMap<Comics, ComicsData> searchComicsName(String name){
+        HashMap<Comics, ComicsData> comicsList = new HashMap<>();
+        for (Map.Entry<Comics, ComicsData> comics : comicsHashMap.entrySet()){
             if (comics.getKey().getName().contains(name)) {
                 comicsList.put(comics.getKey(), comics.getValue());
-                //comicsList.add((Comics) comics);
             }
         }
         return comicsList;
     }
 
-    public HashMap<Comics, Integer> searchComicsAuthor(String author){
-        //ArrayList<Comics> comicsList = new ArrayList<>();
-        HashMap<Comics, Integer> comicsList = new HashMap<>();
-        for (Map.Entry<Comics, Integer> comics : comicsHashMap.entrySet()){
+    public HashMap<Comics, ComicsData> searchComicsAuthor(String author){
+        HashMap<Comics, ComicsData> comicsList = new HashMap<>();
+        for (Map.Entry<Comics, ComicsData> comics : comicsHashMap.entrySet()){
             if (comics.getKey().getAuthor().contains(author)) {
                 comicsList.put(comics.getKey(), comics.getValue());
-                //comicsList.add((Comics) comics);
             }
         }
         return comicsList;
     }
 
-    public HashMap<Comics, Integer> searchComicsGenre(String genre){
-        //ArrayList<Comics> comicsList = new ArrayList<>();
-        HashMap<Comics, Integer> comicsList = new HashMap<>();
-        for (Map.Entry<Comics, Integer> comics : comicsHashMap.entrySet()){
+    public HashMap<Comics, ComicsData> searchComicsGenre(String genre){
+        HashMap<Comics, ComicsData> comicsList = new HashMap<>();
+        for (Map.Entry<Comics, ComicsData> comics : comicsHashMap.entrySet()){
             if (comics.getKey().getGenre().contains(genre)) {
                 comicsList.put(comics.getKey(), comics.getValue());
-                //comicsList.add((Comics) comics);
             }
         }
         return comicsList;
     }
 
     public String searchComics(String searchStr) {
-        HashMap<Comics, Integer> comicsList = new HashMap<>();
+        HashMap<Comics, ComicsData> comicsList = new HashMap<>();
         comicsList.putAll(searchComicsName(searchStr));
         comicsList.putAll(searchComicsAuthor(searchStr));
         comicsList.putAll(searchComicsGenre(searchStr));
         String str = new String();
-        for (Map.Entry<Comics, Integer> comics : comicsList.entrySet()) {
+        for (Map.Entry<Comics, ComicsData> comics : comicsList.entrySet()) {
             str += comics.getKey().toString() + " Количество: " + comics.getValue() + "\n";
         }
         return str;

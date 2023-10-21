@@ -14,13 +14,11 @@ public class Comics implements Serializable {
     protected int pages;
     protected String publishingHouse;
     protected String genre;
-    protected double costPrice;
-    protected double price;
 
     public Comics(){
 
     }
-    public Comics(String author, String designer, String name, LocalDate publicationDate, int pages, String publishingHouse, String genre, double costPrice, double price) {
+    public Comics(String author, String designer, String name, LocalDate publicationDate, int pages, String publishingHouse, String genre) {
         this.author = author;
         this.designer = designer;
         this.name = name;
@@ -28,8 +26,6 @@ public class Comics implements Serializable {
         this.pages = pages;
         this.publishingHouse = publishingHouse;
         this.genre = genre;
-        this.costPrice = costPrice;
-        this.price = price;
     }
 
     @Override
@@ -40,9 +36,7 @@ public class Comics implements Serializable {
                 ", publicationDate=" + publicationDate +
                 ", pages=" + pages +
                 ", publishingHouse=" + publishingHouse +
-                ", genre=" + genre +
-                ", costPrice=" + costPrice +
-                ", price=" + price;
+                ", genre=" + genre;
     }
 
     public String getAuthor() {
@@ -99,34 +93,5 @@ public class Comics implements Serializable {
 
     public void setGenre(String genre) {
         this.genre = genre;
-    }
-
-    public double getCostPrice() {
-        return costPrice;
-    }
-
-    public void setCostPrice(double costPrice) {
-        this.costPrice = costPrice;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Comics comics = (Comics) o;
-        return pages == comics.pages && Double.compare(costPrice, comics.costPrice) == 0 && Double.compare(price, comics.price) == 0 && Objects.equals(author, comics.author) && Objects.equals(designer, comics.designer) && Objects.equals(name, comics.name) && Objects.equals(publicationDate, comics.publicationDate) && Objects.equals(publishingHouse, comics.publishingHouse) && Objects.equals(genre, comics.genre);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(author, designer, name, publicationDate, pages, publishingHouse, genre, costPrice, price);
     }
 }

@@ -87,10 +87,6 @@ public class FabricComics implements Serializable {
         comics.setPublishingHouse(scan.nextLine());
         System.out.println("Введите жанр:");
         comics.setGenre(scan.nextLine());
-        System.out.println("Введите цену закупки:");
-        comics.setCostPrice(Double.parseDouble(scan.nextLine()));
-        System.out.println("Введите цену продажи:");
-        comics.setPrice(Double.parseDouble(scan.nextLine()));
         comicsSet.add(comics);
         return comics;
     }
@@ -117,17 +113,17 @@ public class FabricComics implements Serializable {
         }
         return cms;
     }
-    public Comics getAvengers(){
-        Comics avengrs = new Comics("Стэн Ли", "Джек Кирби", "Avengers", LocalDate.of(1963, 9, 1), 150, "Marvel Comics", "Fantastic", 10, 30);
-        this.comicsSet.add(avengrs);
-        return avengrs;
-    }
+//    public Comics getAvengers(){
+//        Comics avengrs = new Comics("Стэн Ли", "Джек Кирби", "Avengers", LocalDate.of(1963, 9, 1), 150, "Marvel Comics", "Fantastic", 10, 30);
+//        this.comicsSet.add(avengrs);
+//        return avengrs;
+//    }
 //    public static ComicsLegacy getAvengers2(){
 //        return new ComicsLegacy("Стэн Ли", "Джек Кирби", "Avengers 2", LocalDate.of(1970, 3, 22), 175, "Marvel Comics", "Fantastic", 10, 35, getAvengers());
 //    }
-    public Comics getSpiderMan(){
-        Comics spiderMan = new Comics("Стэн Ли", "Стив Дитко", "Spider-Man", LocalDate.of(1962, 7, 15), 278, "Marvel Comics", "Fantastic", 10, 40);
-        this.comicsSet.add(spiderMan);
-        return spiderMan;
-    }
+//    public Comics getSpiderMan(){
+//        Comics spiderMan = new Comics("Стэн Ли", "Стив Дитко", "Spider-Man", LocalDate.of(1962, 7, 15), 278, "Marvel Comics", "Fantastic", 10, 40);
+//        this.comicsSet.add(spiderMan);
+//        return spiderMan;
+//    }
 }

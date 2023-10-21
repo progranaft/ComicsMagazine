@@ -1,8 +1,9 @@
 package org.example.comics;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class ComicsData {
+public class ComicsData implements Serializable {
     protected Integer quantity;
     protected LocalDate dataReceipts;
     protected Double coastPrice;
@@ -15,6 +16,17 @@ public class ComicsData {
         this.coastPrice = coastPrice;
         this.salePrice = salePrice;
         this.productId = productId;
+    }
+
+    @Override
+    public String toString() {
+        return "ComicsData{" +
+                "quantity=" + quantity +
+                ", dataReceipts=" + dataReceipts +
+                ", coastPrice=" + coastPrice +
+                ", salePrice=" + salePrice +
+                ", productId=" + productId +
+                '}';
     }
 
     public Integer getQuantity() {
