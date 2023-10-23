@@ -22,15 +22,14 @@ public class Shop implements Serializable {
             tmp += input.nextInt();
             comicsHashMap.get(comics).setQuantity(tmp);
         } else {
-            Scanner input = new Scanner(System.in);
             System.out.println("Введите цену закупки: ");
-            Double coastPrice = input.nextDouble();
+            Double coastPrice = Inputs.inputDouble();
             System.out.println("введите цену продажи: ");
-            Double price = input.nextDouble();
+            Double price = Inputs.inputDouble();
             System.out.println("Введите ID продукта: ");
-            Long id = input.nextLong();
+            Long id = Inputs.inputLong();
             System.out.println("Введите количество: ");
-            Integer quan = input.nextInt();
+            Integer quan = Inputs.inputInt();
             comicsHashMap.put(comics, new ComicsData(quan ,LocalDate.now(), coastPrice, price, id));
         }
     }
@@ -59,7 +58,7 @@ public class Shop implements Serializable {
             } else {
                 comicsHashMap.remove(comics);
             }
-            System.out.println("Комикс учпешно удален");
+            System.out.println("Комикс успешно удален");
         } else {
             System.out.println("Комикс не найден");
         }

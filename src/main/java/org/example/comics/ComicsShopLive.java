@@ -3,11 +3,17 @@ package org.example.comics;
 import java.io.*;
 import java.util.Scanner;
 
-public class ComicsShopLive {
+public class ComicsShopLive extends Thread {
     Shop shop;
     FabricComics fc;
     Save save;
-    public void start(){
+
+    @Override
+    public void run() {
+        this.gogogo();
+    }
+
+    public void gogogo(){
         shop = null;
         fc = null;
         File saveFile = new File("save.txt");
@@ -60,8 +66,9 @@ public class ComicsShopLive {
             } else if (choice == 3) {
                 System.out.println(shop.showComicsList());
             } else if (choice == 4) {
-                this.save();
+
             } else if (choice == 5) {
+
                 Menu fabricMenu = new Menu(new FabricMenu());
                 while (true) {
                     Integer choice2 = fabricMenu.showMenu();
@@ -82,9 +89,7 @@ public class ComicsShopLive {
                     } else if (choice2 == 3) {
                         System.out.println(fc.showComics());
                     } else if (choice2 == 4) {
-                        Menu changeComicsMenu = new Menu(new ChangeComicsMenu());
-
-
+                        this.fc.changeComics();
                     } else if (choice2 == 0) {
                         break;
                     }
@@ -97,6 +102,8 @@ public class ComicsShopLive {
                 System.out.println("Для продолжения введите любой символ");
                 str = input.nextLine();
                 continue;
+            } else if (choice == 9) {
+                this.save();
             } else if (choice == 0) {
 //                Menu exitMenu = new Menu(new ShowMenu() {
 //                    @Override

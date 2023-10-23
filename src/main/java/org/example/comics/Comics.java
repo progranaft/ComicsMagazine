@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Comics implements Serializable {
+    protected String fabricId;
     protected String author;
     protected String designer;
     protected String name;
@@ -14,11 +15,11 @@ public class Comics implements Serializable {
     protected int pages;
     protected String publishingHouse;
     protected String genre;
-
     public Comics(){
 
     }
-    public Comics(String author, String designer, String name, LocalDate publicationDate, int pages, String publishingHouse, String genre) {
+    public Comics(String author, String designer, String name, LocalDate publicationDate, int pages, String publishingHouse, String genre, String fabricId) {
+        this.fabricId = fabricId;
         this.author = author;
         this.designer = designer;
         this.name = name;
@@ -30,15 +31,25 @@ public class Comics implements Serializable {
 
     @Override
     public String toString() {
-        return "author=" + author +
-                ", designer=" + designer +
-                ", name=" + name +
+        return "Comics{" +
+                "fabricId='" + fabricId + '\'' +
+                ", author='" + author + '\'' +
+                ", designer='" + designer + '\'' +
+                ", name='" + name + '\'' +
                 ", publicationDate=" + publicationDate +
                 ", pages=" + pages +
-                ", publishingHouse=" + publishingHouse +
-                ", genre=" + genre;
+                ", publishingHouse='" + publishingHouse + '\'' +
+                ", genre='" + genre + '\'' +
+                '}';
     }
 
+    public String getFabricId() {
+        return fabricId;
+    }
+
+    public void setFabricId(String fabricId) {
+        this.fabricId = fabricId;
+    }
     public String getAuthor() {
         return author;
     }

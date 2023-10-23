@@ -2,6 +2,7 @@ package org.example.comics;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class ComicsLegacy extends Comics implements Serializable {
     private Comics legacy;
@@ -9,21 +10,24 @@ public class ComicsLegacy extends Comics implements Serializable {
     public ComicsLegacy(){
 
     }
-    public ComicsLegacy(String author, String designer, String name, LocalDate publicationDate, int pages, String publishingHouse, String genre, Comics legacy) {
-        super(author, designer, name, publicationDate, pages, publishingHouse, genre);
+    public ComicsLegacy(String author, String designer, String name, LocalDate publicationDate, int pages, String publishingHouse, String genre, Comics legacy, String fabricId) {
+        super(author, designer, name, publicationDate, pages, publishingHouse, genre, fabricId);
         this.legacy = legacy;
     }
 
     @Override
     public String toString() {
-        return "author=" + author +
-                ", designer=" + designer +
-                ", name=" + name +
+        return "ComicsLegacy{" +
+                "legacy=" + legacy.getName() +
+                ", fabricId='" + fabricId + '\'' +
+                ", author='" + author + '\'' +
+                ", designer='" + designer + '\'' +
+                ", name='" + name + '\'' +
                 ", publicationDate=" + publicationDate +
                 ", pages=" + pages +
-                ", publishingHouse=" + publishingHouse +
-                ", genre=" + genre +
-                ", legacy=" + legacy.getName();
+                ", publishingHouse='" + publishingHouse + '\'' +
+                ", genre='" + genre + '\'' +
+                '}';
     }
 
     public Comics getLegacy() {
@@ -33,4 +37,5 @@ public class ComicsLegacy extends Comics implements Serializable {
     public void setLegacy(Comics legacy) {
         this.legacy = legacy;
     }
+
 }

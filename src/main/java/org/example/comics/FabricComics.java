@@ -72,6 +72,7 @@ public class FabricComics implements Serializable {
             comicsL.setLegacy(legacyComics);
             comics = (Comics) comicsL;
         }
+        comics.setFabricId(this.generateId());
         Scanner scan = new Scanner(System.in);
         System.out.println("Введите автора:");
         comics.setAuthor(scan.nextLine());
@@ -80,9 +81,9 @@ public class FabricComics implements Serializable {
         System.out.println("Введите название:");
         comics.setName(scan.nextLine());
         System.out.println("Введите дату (ГГГГ-ММ-ДД):");
-        comics.setPublicationDate(LocalDate.parse(scan.nextLine()));
+        comics.setPublicationDate(Inputs.inputDate());
         System.out.println("Введите количество страниц:");
-        comics.setPages(Integer.parseInt(scan.nextLine()));
+        comics.setPages(Inputs.inputInt());
         System.out.println("Введите издательство:");
         comics.setPublishingHouse(scan.nextLine());
         System.out.println("Введите жанр:");
@@ -114,8 +115,91 @@ public class FabricComics implements Serializable {
         return cms;
     }
 
-    public void changeComics(){
+    public String generateId(){
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            int boolRand = (int)(Math.random()*2);
+            if (boolRand == 1) {
+                str.append((char)(int)(Math.random()*10 + 48));
+            } else if (boolRand == 0) {
+                str.append((char)(int)(Math.random()*26 + 65));
+            }
+        }
+        return str.toString();
+    }
 
+    public int changeComics(){
+        Comics comics = null;
+        while(true){
+            Scanner input = new Scanner(System.in);
+            String str = new String();
+            System.out.println("Введите название комикса или \"отмена\" для возврата:");
+            str = input.nextLine();
+            if (str.equals("отмена")) {
+                return 0;
+            } else {
+                comics = this.checkComics(str);
+                if (comics == null) {
+                    System.out.println("Комикс не найден или не существует");
+                    continue;
+                } else {
+                    break;
+                }
+            }
+        }
+        if (comics != null) {
+            while(true){
+                Scanner in = new Scanner(System.in);
+                Menu changeMenu = new Menu(new ChangeComicsMenu());
+                Integer choice = changeMenu.showMenu();
+                if (choice == 1) {
+                    System.out.println("Введите новое название:");
+                    String str = in.nextLine();
+                    comics.setName(str);
+                    System.out.println("Название изменено");
+                    continue;
+                } else if (choice == 2) {
+                    System.out.println("Введите нового автора:");
+                    String str = in.nextLine();
+                    comics.setAuthor(str);
+                    System.out.println("Автор изменен");
+                    continue;
+                } else if (choice == 3) {
+                    System.out.println("Введите нового дизайнера:");
+                    String str = in.nextLine();
+                    comics.setDesigner(str);
+                    System.out.println("Дизайнер изменен");
+                    continue;
+                } else if (choice == 4) {
+                    System.out.println("Введите новую дату (ГГГГ-ММ-ДД):");
+                    comics.setPublicationDate(Inputs.inputDate());
+                    System.out.println("Дата изменена");
+                    continue;
+                } else if (choice == 5) {
+                    System.out.println("Введите новое кол-во страниц:");
+                    Integer pages = Inputs.inputInt();
+                    comics.setPages(pages);
+                    System.out.println("Кол-во страниц изменено");
+                    continue;
+                } else if (choice == 6) {
+                    System.out.println("Введите новое издательство:");
+                    String str = in.nextLine();
+                    comics.setPublishingHouse(str);
+                    System.out.println("Издательство изменено");
+                    continue;
+                } else if (choice == 7) {
+                    System.out.println("Введите жанр:");
+                    String str = in.nextLine();
+                    comics.setGenre(str);
+                    System.out.println("Жанр изменен");
+                    continue;
+                } else if (choice == 0) {
+                    break;
+                }
+            }
+
+        }
+        return 0;
     }
 
 
