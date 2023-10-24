@@ -1,19 +1,214 @@
 package org.example.comics;
 
+import org.example.sounds.Sound;
+import org.example.sounds.Sound2;
+
 import java.io.*;
 import java.util.Scanner;
 
-public class ComicsShopLive extends Thread {
+public class ComicsShopLive {
+    private User user;
+    Sound sound;
+    Sound2 sound2;
     Shop shop;
     FabricComics fc;
     Save save;
 
-    @Override
-    public void run() {
-        this.gogogo();
+    public ComicsShopLive(User user){
+        this.user = user;
     }
 
-    public void gogogo(){
+    public void go(){
+        if (user.isAdministrator()) {
+            this.goAdmin();
+        } else {
+            this.goUser();
+        }
+    }
+
+    public void goAdmin(){
+        this.goShop();
+        Menu menu = new Menu(new MainMenu());
+        while (true) {
+            Integer choice = menu.showMenu();
+            if (choice == 1) {
+                Scanner scan = new Scanner(System.in);
+                System.out.println("Введите название комикса:");
+                String str = scan.nextLine();
+                Comics cms = fc.checkComics(str);
+                if (cms != null) {
+                    shop.addComics(cms);
+                    System.out.println("Комикс добавлен в магазин");
+                } else {
+                    System.out.println("Комикс не найден, либо не существует");
+                }
+            } else if (choice == 2) {
+                Scanner scan = new Scanner(System.in);
+                System.out.println("Введите название удаляемого комикса");
+                String str = scan.nextLine();
+                shop.deleteComics(str);
+            } else if (choice == 3) {
+                System.out.println(shop.showComicsList());
+            } else if (choice == 4) {
+                System.out.println(shop.showUsersList());
+            } else if (choice == 5) {
+
+                Menu fabricMenu = new Menu(new FabricMenu());
+                while (true) {
+                    Integer choice2 = fabricMenu.showMenu();
+                    if (choice2 == 1) {
+                        sound2 = new Sound2();
+                        sound2.start();
+                        Comics comics = fc.createComics();
+                        if (comics != null) {
+                            Scanner in = new Scanner(System.in);
+                            Menu addInMagazine = new Menu(()->"Добавить комикс в магазин?\n1. Да\n2. Нет");
+                            Integer input = addInMagazine.showMenu();
+                            if (input == 1) {
+                                if (comics != null) {
+                                    shop.addComics(comics);
+                                }
+                            }
+                        }
+                        sound2.getClip().stop();
+                        sound2.getClip().close();
+                        sound = null;
+                    } else if (choice2 == 2) {
+
+                    } else if (choice2 == 3) {
+                        System.out.println(fc.showComics());
+                    } else if (choice2 == 4) {
+                        this.fc.changeComics();
+                    } else if (choice2 == 0) {
+                        break;
+                    }
+                }
+            } else if (choice == 6) {
+
+                System.out.println("Введите название/автора/жанр комикса");
+                Scanner input = new Scanner(System.in);
+                String str = input.nextLine();
+                System.out.println(shop.searchComics(str));
+                System.out.println("Для продолжения введите любой символ");
+                str = input.nextLine();
+                continue;
+            } else if (choice == 9) {
+                this.save();
+            } else if (choice == 879546) {
+                if (sound == null) {
+                    sound = new Sound();
+                    sound.start();
+                    Inputs.funky();
+                } else {
+                    sound.getClip().stop();
+                    sound.getClip().close();
+                    sound.interrupt();
+                    sound = null;
+                }
+            } else if (choice == 0) {
+                Menu exitMenu = new Menu(()->"Сохранить?\n1. Да\n2. Нет");
+                Integer input = exitMenu.showMenu();
+                if (input == 1) {
+                    this.save();
+                    break;
+                } if (input == 2){
+                    break;
+                } else {
+                    continue;
+                }
+            } else {
+                continue;
+            }
+        }
+    }
+
+    public void goUser(){
+        this.goShop();
+        Menu menu = new Menu(new MainMenu());
+
+        while (true) {
+            Integer choice = menu.showMenu();
+            if (choice == 1) {
+                Scanner scan = new Scanner(System.in);
+                System.out.println("Введите название комикса:");
+                String str = scan.nextLine();
+                Comics cms = fc.checkComics(str);
+                if (cms != null) {
+                    shop.addComics(cms);
+                    System.out.println("Комикс добавлен в магазин");
+                } else {
+                    System.out.println("Комикс не найден, либо не существует");
+                }
+            } else if (choice == 2) {
+                Scanner scan = new Scanner(System.in);
+                System.out.println("Введите название удаляемого комикса");
+                String str = scan.nextLine();
+                shop.deleteComics(str);
+            } else if (choice == 3) {
+                System.out.println(shop.showComicsList());
+            } else if (choice == 4) {
+                System.out.println(shop.showUsersList());
+            } else if (choice == 5) {
+
+                Menu fabricMenu = new Menu(new FabricMenu());
+                while (true) {
+                    Integer choice2 = fabricMenu.showMenu();
+                    if (choice2 == 1) {
+                        sound2 = new Sound2();
+                        sound2.start();
+                        Comics comics = fc.createComics();
+                        if (comics != null) {
+                            Scanner in = new Scanner(System.in);
+                            Menu addInMagazine = new Menu(()->"Добавить комикс в магазин?\n1. Да\n2. Нет");
+                            Integer input = addInMagazine.showMenu();
+                            if (input == 1) {
+                                if (comics != null) {
+                                    shop.addComics(comics);
+                                }
+                            }
+                        }
+                        sound2.getClip().stop();
+                        sound2.getClip().close();
+                        sound = null;
+                    } else if (choice2 == 2) {
+
+                    } else if (choice2 == 3) {
+                        System.out.println(fc.showComics());
+                    } else if (choice2 == 4) {
+                        this.fc.changeComics();
+                    } else if (choice2 == 0) {
+                        break;
+                    }
+                }
+            } else if (choice == 6) {
+
+                System.out.println("Введите название/автора/жанр комикса");
+                Scanner input = new Scanner(System.in);
+                String str = input.nextLine();
+                System.out.println(shop.searchComics(str));
+                System.out.println("Для продолжения введите любой символ");
+                str = input.nextLine();
+                continue;
+            } else if (choice == 9) {
+                this.save();
+            } else if (choice == 0) {
+                Menu exitMenu = new Menu(()->"Сохранить?\n1. Да\n2. Нет");
+                Integer input = exitMenu.showMenu();
+                if (input == 1) {
+                    this.save();
+                    break;
+                } if (input == 2){
+                    break;
+                } else {
+                    continue;
+                }
+            } else {
+                continue;
+            }
+        }
+    }
+
+    public void goShop(){
         shop = null;
         fc = null;
         File saveFile = new File("save.txt");
@@ -42,89 +237,7 @@ public class ComicsShopLive extends Thread {
             fc = new FabricComics();
             System.out.println("Создан новый магазин");
         }
-
-        Menu menu = new Menu(new MainMenu());
-
-        while (true) {
-            Integer choice = menu.showMenu();
-            if (choice == 1) {
-                Scanner scan = new Scanner(System.in);
-                System.out.println("Введите название комикса:");
-                String str = scan.nextLine();
-                Comics cms = fc.checkComics(str);
-                if (cms != null) {
-                    shop.addComics(cms);
-                    System.out.println("Комикс добавлен в магазин");
-                } else {
-                    System.out.println("Комикс не найден, либо не существует");
-                }
-            } else if (choice == 2) {
-                Scanner scan = new Scanner(System.in);
-                System.out.println("Введите название удаляемого комикса");
-                String str = scan.nextLine();
-                shop.deleteComics(str);
-            } else if (choice == 3) {
-                System.out.println(shop.showComicsList());
-            } else if (choice == 4) {
-
-            } else if (choice == 5) {
-
-                Menu fabricMenu = new Menu(new FabricMenu());
-                while (true) {
-                    Integer choice2 = fabricMenu.showMenu();
-                    if (choice2 == 1) {
-                        Comics comics = fc.createComics();
-                        if (comics != null) {
-                            Scanner in = new Scanner(System.in);
-                            Menu addInMagazine = new Menu(()->"Добавить комикс в магазин?\n1. Да\n2. Нет");
-                            Integer input = addInMagazine.showMenu();
-                            if (input == 1) {
-                                if (comics != null) {
-                                    shop.addComics(comics);
-                                }
-                            }
-                        }
-                    } else if (choice2 == 2) {
-
-                    } else if (choice2 == 3) {
-                        System.out.println(fc.showComics());
-                    } else if (choice2 == 4) {
-                        this.fc.changeComics();
-                    } else if (choice2 == 0) {
-                        break;
-                    }
-                }
-            } else if (choice == 6) {
-                System.out.println("Введите название/автора/жанр комикса");
-                Scanner input = new Scanner(System.in);
-                String str = input.nextLine();
-                System.out.println(shop.searchComics(str));
-                System.out.println("Для продолжения введите любой символ");
-                str = input.nextLine();
-                continue;
-            } else if (choice == 9) {
-                this.save();
-            } else if (choice == 0) {
-//                Menu exitMenu = new Menu(new ShowMenu() {
-//                    @Override
-//                    public String showMenuOptions() {
-//                        return "Сохранить?\n1. Да\n2. Нет";
-//                    }
-//                });
-                Menu exitMenu = new Menu(()->"Сохранить?\n1. Да\n2. Нет");
-                Integer input = exitMenu.showMenu();
-                if (input == 1) {
-                    this.save();
-                    break;
-                } if (input == 2){
-                    break;
-                } else {
-                    continue;
-                }
-            } else {
-                continue;
-            }
-        }
+        this.shop.getUsers().add(this.user);
     }
 
     public void save(){

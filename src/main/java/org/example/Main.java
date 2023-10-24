@@ -10,9 +10,12 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Sound snd = new Sound();
-        ComicsShopLive cms = new ComicsShopLive();
-        cms.start();
-        snd.start();
+
+        Reception rec = new Reception();
+        rec.start();
+
+//        ComicsShopLive cms = new ComicsShopLive();
+//        cms.start();
+
     }
 }

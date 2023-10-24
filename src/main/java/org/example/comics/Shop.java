@@ -3,16 +3,14 @@ package org.example.comics;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Shop implements Serializable {
     protected HashMap<Comics, ComicsData> comicsHashMap;
-
+    protected HashSet<User> users;
     public Shop(){
         this.comicsHashMap = new HashMap<>();
+        this.users = new HashSet<>();
     }
 
     public void addComics(Comics comics){
@@ -32,6 +30,14 @@ public class Shop implements Serializable {
             Integer quan = Inputs.inputInt();
             comicsHashMap.put(comics, new ComicsData(quan ,LocalDate.now(), coastPrice, price, id));
         }
+    }
+
+    public String showUsersList(){
+        StringBuilder str = new StringBuilder();
+        for (User user : this.users) {
+            str.append(user.toString()).append("\n");
+        }
+        return str.toString();
     }
 
     public String showComicsList() {
@@ -62,6 +68,14 @@ public class Shop implements Serializable {
         } else {
             System.out.println("Комикс не найден");
         }
+    }
+
+    public HashSet<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(HashSet<User> users) {
+        this.users = users;
     }
 
     public HashMap<Comics, ComicsData> searchComicsName(String name){
