@@ -5,11 +5,20 @@ import java.io.Serializable;
 public class Save implements Serializable {
     private FabricComics fc;
     private Shop shop;
-    public Save(FabricComics fc, Shop shop) {
-        this.fc = fc;
-        this.shop = shop;
+    private Reception reception;
+
+    public Save(){
+        this.fc = new FabricComics();
+        this.shop = new Shop();
+        this.reception = new Reception();
     }
 
+    public Reception getReception() {
+        return reception;
+    }
+    public void setReception(Reception reception) {
+        this.reception = reception;
+    }
     public FabricComics getFc() {
         return fc;
     }

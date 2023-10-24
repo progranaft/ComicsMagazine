@@ -11,8 +11,11 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        Reception rec = new Reception();
-        rec.start();
+        MainController mainController = new MainController();
+        mainController.start();
+
+//        Reception rec = new Reception();
+//        rec.start();
 
 //        ComicsShopLive cms = new ComicsShopLive();
 //        cms.start();
