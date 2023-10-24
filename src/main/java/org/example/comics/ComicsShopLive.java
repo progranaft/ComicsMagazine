@@ -93,10 +93,12 @@ public class ComicsShopLive {
                 mainController.save();
             } else if (choice == 879546) {
                 if (sound == null) {
+                    Inputs.pegs = true;
                     sound = new Sound();
                     sound.start();
-                    Inputs.funky();
+                    //Inputs.funky();
                 } else {
+                    Inputs.pegs = false;
                     sound.getClip().stop();
                     sound.getClip().close();
                     sound.interrupt();

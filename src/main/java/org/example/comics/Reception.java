@@ -15,6 +15,9 @@ public class Reception implements Serializable {
         User test = new User("Test");
         test.setAdministrator(true);
         this.accounts.put(test, "12345");
+        User test2 = new User("Test12312");
+        test2.setAdministrator(true);
+        this.accounts.put(test2, "12345");
     }
 
     public User authorization() {

@@ -3,14 +3,14 @@ package org.example.comics;
 import java.util.Scanner;
 
 public class Menu {
-    protected String mainMenu;
+    private ShowMenu showMenu;
     public Menu(ShowMenu options){
-        this.mainMenu = options.showMenuOptions();
+        this.showMenu = options;
     }
     public Integer showMenu(){
         Integer choice = null;
         while (true) {
-            System.out.println(this.mainMenu);
+            System.out.println(showMenu.showMenuOptions());
             Scanner scanner = new Scanner(System.in);
             try{
                 choice = scanner.nextInt();
