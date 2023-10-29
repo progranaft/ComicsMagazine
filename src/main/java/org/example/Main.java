@@ -14,11 +14,5 @@ public class Main {
         MainController mainController = new MainController();
         mainController.start();
 
-//        Reception rec = new Reception();
-//        rec.start();
-
-//        ComicsShopLive cms = new ComicsShopLive();
-//        cms.start();
-
     }
 }

@@ -1,5 +1,6 @@
 package org.example.comics;
 
+import javax.swing.text.DefaultCaret;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,16 +9,16 @@ import java.util.Scanner;
 public class Reception implements Serializable {
     HashMap<User, String> accounts;
     public Reception() {
-        this.accounts = new HashMap<>();
-        User admin = new User("Sasha");
-        admin.setAdministrator(true);
-        this.accounts.put(admin, "qwert");
-        User test = new User("Test");
-        test.setAdministrator(true);
-        this.accounts.put(test, "12345");
-        User test2 = new User("Test12312");
-        test2.setAdministrator(true);
-        this.accounts.put(test2, "12345");
+//        this.accounts = new HashMap<>();
+//        User admin = new User("Sasha");
+//        admin.setAdministrator(true);
+//        this.accounts.put(admin, "qwert");
+//        User test = new User("Test");
+//        test.setAdministrator(true);
+//        this.accounts.put(test, "12345");
+//        User test2 = new User("Test12312");
+//        test2.setAdministrator(true);
+//        this.accounts.put(test2, "12345");
     }
 
     public User authorization() {
@@ -36,7 +37,19 @@ public class Reception implements Serializable {
                     continue;
                 }
             } else if (choice == 2) {
-
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("Введите имя пользователя: ");
+                String name = scanner.nextLine();
+                System.out.println("Задайте пароль: ");
+                String pass = scanner.nextLine();
+                System.out.println("Повторите пароль: ");
+                String pass2 = scanner.nextLine();
+                if (pass.equals(pass2)) {
+                    this.accounts.put(new User(name), pass);
+                    System.out.println("Пользователь добавлен");
+                } else {
+                    System.out.println("Пароли не совпадают");
+                }
             } else if (choice == 3) {
                 return null;
             }
