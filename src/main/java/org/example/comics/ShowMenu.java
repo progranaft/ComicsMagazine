@@ -1,5 +1,5 @@
 package org.example.comics;
 
 public interface ShowMenu {
-    public String showMenuOptions();
+    public String showMenuOptions(User user);
 }

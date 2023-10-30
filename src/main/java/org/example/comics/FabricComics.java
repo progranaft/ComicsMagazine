@@ -150,7 +150,7 @@ public class FabricComics implements Serializable {
         if (comics != null) {
             while(true){
                 Scanner in = new Scanner(System.in);
-                Menu changeMenu = new Menu(new ChangeComicsMenu());
+                Menu changeMenu = new Menu(new User(), new ChangeComicsMenu());
                 Integer choice = changeMenu.showMenu();
                 if (choice == 1) {
                     System.out.println("Введите новое название:");
@@ -208,12 +208,14 @@ public class FabricComics implements Serializable {
 //        this.comicsSet.add(avengrs);
 //        return avengrs;
 //    }
-//    public static ComicsLegacy getAvengers2(){
-//        return new ComicsLegacy("Стэн Ли", "Джек Кирби", "Avengers 2", LocalDate.of(1970, 3, 22), 175, "Marvel Comics", "Fantastic", 10, 35, getAvengers());
-//    }
-//    public Comics getSpiderMan(){
-//        Comics spiderMan = new Comics("Стэн Ли", "Стив Дитко", "Spider-Man", LocalDate.of(1962, 7, 15), 278, "Marvel Comics", "Fantastic", 10, 40);
-//        this.comicsSet.add(spiderMan);
-//        return spiderMan;
-//    }
+    public Comics getAvengers2(){
+        Comics avengers2 = new Comics("Стэн Ли", "Джек Кирби", "Avengers 2", LocalDate.of(1970, 3, 22), 175, "Marvel Comics", "Fantastic", "ITJFNDRWEO");
+        this.comicsSet.add(avengers2);
+        return avengers2;
+    }
+    public Comics getSpiderMan(){
+        Comics spiderMan = new Comics("Стэн Ли", "Стив Дитко", "Spider-Man", LocalDate.of(1962, 7, 15), 278, "Marvel Comics", "Fantastic", "ABCDEFGHIJ");
+        this.comicsSet.add(spiderMan);
+        return spiderMan;
+    }
 }

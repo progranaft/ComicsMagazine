@@ -10,7 +10,7 @@ public class ComicsLegacy extends Comics implements Serializable {
     public ComicsLegacy(){
 
     }
-    public ComicsLegacy(String author, String designer, String name, LocalDate publicationDate, int pages, String publishingHouse, String genre, Comics legacy, String fabricId) {
+    public ComicsLegacy(String author, String designer, String name, LocalDate publicationDate, int pages, String publishingHouse, String genre,String fabricId, Comics legacy) {
         super(author, designer, name, publicationDate, pages, publishingHouse, genre, fabricId);
         this.legacy = legacy;
     }

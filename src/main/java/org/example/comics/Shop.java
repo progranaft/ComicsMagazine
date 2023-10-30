@@ -1,5 +1,7 @@
 package org.example.comics;
 
+import javafx.scene.shape.ClosePathBuilder;
+
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.time.LocalDate;
@@ -40,12 +42,54 @@ public class Shop implements Serializable {
         return str.toString();
     }
 
-    public String showComicsList() {
-        StringBuilder str = new StringBuilder();
-        for (Map.Entry<Comics, ComicsData> comic:comicsHashMap.entrySet()) {
-            str.append(comic.getKey().toString()).append(comic.getValue().toString()).append("\n");
+    private String showComicsList(HashMap<Comics, ComicsData> comicsHashMap, User user) {
+        StringBuilder res = new StringBuilder();
+        if (user.isAdministrator()) {
+            res.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+            res.append(String.format("| %20s | %10s | %10s | %10s | %15s | %5s | %15s | %8s | %10s | %7s | %6s | %5s | %5s | %20s |\n",
+                    "Название", "Жанр", "Дт. созд.", "FabricID", "Издательство", "Стр.", "Дизайнер", "Автор", "Дт. завоза", "MgzId", "Кол-во", "Закуп", "Цена", "Предистория"));
+            res.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+            for(Map.Entry<Comics, ComicsData> comic:comicsHashMap.entrySet()){
+                Comics tmp = comic.getKey();
+                ComicsData tmp2 = comic.getValue();
+                res.append(String.format("| %20s | %10s | %10s | %10s | %15s | %5s | %15s | %8s | %10s | %7s | %6s | %5s | %5s |",
+                        tmp.getName(), tmp.getGenre(), tmp.getPublicationDate().toString(),
+                        tmp.getFabricId(), tmp.getPublishingHouse(), tmp.getPages(), tmp.getDesigner(), tmp.getAuthor(),
+                        tmp2.getDataReceipts(), tmp2.getProductId(), tmp2.getQuantity(), tmp2.getCoastPrice(), tmp2.getSalePrice()));
+                if (tmp instanceof ComicsLegacy) {
+                    ComicsLegacy tmpLeg = (ComicsLegacy) tmp;
+                    res.append(String.format(" %20s |\n", tmpLeg.getLegacy().getName()));
+                } else {
+                    res.append(String.format(" %20s |\n", "Нет"));
+                }
+            }
+            res.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        } else {
+            res.append(String.format("| %20s | %10s | %10s | %15s | %5s | %15s | %8s | %10s | %7s | %6s | %5s | %15s |\n",
+                    "Название", "Жанр", "Дт. созд.", "Издательство", "Стр.", "Дизайнер", "Автор", "Дт. завоза", "MgzId", "Кол-во", "Цена", "Предистория"));
+            res.append("-------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+            for(Map.Entry<Comics, ComicsData> comic:this.comicsHashMap.entrySet()){
+                Comics tmp = comic.getKey();
+                ComicsData tmp2 = comic.getValue();
+                res.append(String.format("| %20s | %10s | %10s | %12s | %5s | %8s | %8s | %10s | %7s | %6s | %5s |",
+                        tmp.getName(), tmp.getGenre(), tmp.getPublicationDate().toString(),
+                        tmp.getPublishingHouse(), tmp.getPages(), tmp.getDesigner(), tmp.getAuthor(),
+                        tmp2.getDataReceipts(), tmp2.getProductId(), tmp2.getQuantity(), tmp2.getCoastPrice(), tmp2.getSalePrice()));
+                if (tmp instanceof ComicsLegacy) {
+                    ComicsLegacy tmpLeg = (ComicsLegacy) tmp;
+                    res.append(String.format(" %20s |\n", tmpLeg.getLegacy().getName()));
+                } else {
+                    res.append(String.format(" %20s |\n", "Нет"));
+                }
+            }
         }
-        return str.toString();
+        return res.toString();
+    }
+
+    public String showAllComics(User user){
+        String res = "";
+        res = this.showComicsList(this.comicsHashMap, user);
+        return res;
     }
 
     public void deleteComics(String name) {
@@ -80,7 +124,7 @@ public class Shop implements Serializable {
 
     public HashMap<Comics, ComicsData> searchComicsName(String name){
         HashMap<Comics, ComicsData> comicsList = new HashMap<>();
-        for (Map.Entry<Comics, ComicsData> comics : comicsHashMap.entrySet()){
+        for (Map.Entry<Comics, ComicsData> comics : this.comicsHashMap.entrySet()){
             if (comics.getKey().getName().contains(name)) {
                 comicsList.put(comics.getKey(), comics.getValue());
             }
@@ -90,7 +134,7 @@ public class Shop implements Serializable {
 
     public HashMap<Comics, ComicsData> searchComicsAuthor(String author){
         HashMap<Comics, ComicsData> comicsList = new HashMap<>();
-        for (Map.Entry<Comics, ComicsData> comics : comicsHashMap.entrySet()){
+        for (Map.Entry<Comics, ComicsData> comics : this.comicsHashMap.entrySet()){
             if (comics.getKey().getAuthor().contains(author)) {
                 comicsList.put(comics.getKey(), comics.getValue());
             }
@@ -100,7 +144,7 @@ public class Shop implements Serializable {
 
     public HashMap<Comics, ComicsData> searchComicsGenre(String genre){
         HashMap<Comics, ComicsData> comicsList = new HashMap<>();
-        for (Map.Entry<Comics, ComicsData> comics : comicsHashMap.entrySet()){
+        for (Map.Entry<Comics, ComicsData> comics : this.comicsHashMap.entrySet()){
             if (comics.getKey().getGenre().contains(genre)) {
                 comicsList.put(comics.getKey(), comics.getValue());
             }
@@ -108,50 +152,31 @@ public class Shop implements Serializable {
         return comicsList;
     }
 
-    public String searchComics(String searchStr) {
+    public String searchComics(String searchStr, User user) {
         HashMap<Comics, ComicsData> comicsList = new HashMap<>();
         comicsList.putAll(searchComicsName(searchStr));
         comicsList.putAll(searchComicsAuthor(searchStr));
         comicsList.putAll(searchComicsGenre(searchStr));
-        String str = new String();
-        for (Map.Entry<Comics, ComicsData> comics : comicsList.entrySet()) {
-            str += comics.getKey().toString() + " Количество: " + comics.getValue() + "\n";
-        }
-        return str;
+        return this.showComicsList(comicsList, user);
     }
 
-//    protected ArrayList<Comics> comics;
-//    public Shop() {
-//        this.comics = new ArrayList<>();
-//    }
-//    public String showComicsList(){
-//        String str = new String();
-//        for (Comics comic:comics) {
-//            str += comic.toString() + "\n";
-//        }
-//        return str;
-//    }
-//    public void addComics(Comics comics){
-//        this.comics.add(comics);
-//    }
-//
-//    public void deleteComics(String name) {
-//        int index = -1;
-//        for (int i = 0; i < this.comics.size(); i++) {
-//            if (this.comics.get(i).getName().equals(name)) {
-//                index = i;
-//                break;
-//            }
-//        }
-//        if (index > -1) {
-//            this.comics.remove(index);
-//            System.out.println("Комикс удален");
-//        } else {
-//            System.out.println("Комикс не найден");
-//        }
-//    }
-//
-//    public void changeComics() {
-//
-//    }
+    public String getPremierComics(User user){
+        HashMap<Comics, ComicsData> tmp = new HashMap<>();
+        for (Map.Entry<Comics, ComicsData> item : this.comicsHashMap.entrySet()) {
+            if (item.getValue().getDataReceipts().isAfter(LocalDate.now().minusDays(30))) {
+                tmp.put(item.getKey(), item.getValue());
+            }
+        }
+        return this.showComicsList(tmp, user);
+    }
+
+    public String getNewComics(User user){
+        HashMap<Comics, ComicsData> res = new HashMap<>();
+        for (Map.Entry<Comics, ComicsData> item:this.comicsHashMap.entrySet()){
+            if (item.getKey().getPublicationDate().isAfter(LocalDate.now().minusDays(30))) {
+                res.put(item.getKey(), item.getValue());
+            }
+        }
+        return this.showComicsList(res, user);
+    }
 }

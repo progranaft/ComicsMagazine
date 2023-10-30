@@ -2,17 +2,28 @@ package org.example.comics;
 
 public class MainMenu implements ShowMenu{
     @Override
-    public String showMenuOptions() {
+    public String showMenuOptions(User user) {
         String str = "";
-        if (Inputs.pegs) str += Inputs.funky();
-        str += "\n1. Добавить комикс" +
-                "\n2. Удалить комикс" +
-                "\n3. Показать список комиксов" +
-                "\n4. Показать список покупателей" +
-                "\n5. База комиксов" +
-                "\n6. Поиск комиксов по магазину" +
-                "\n9. Сохранить" +
-                "\n0. Выход";
+        if (user.isAdministrator()) {
+            if (Inputs.pegs) str += Inputs.funky();
+            str += "\n1. Магазин комиксов" +
+                    "\n2. База комиксов" +
+                    "\n3. База покупателей" +
+                    "\n4. " +
+                    "\n5. " +
+                    "\n6. " +
+                    "\n9. Сохранить" +
+                    "\n0. Выход";
+        } else {
+            str += "\n1. Магазин комиксов" +
+                    "\n2. Мои покупки" +
+                    "\n3. Настройки" +
+                    "\n4. " +
+                    "\n5. " +
+                    "\n6. " +
+                    "\n9. Сохранить" +
+                    "\n0. Выход";
+        }
         return str;
     }
 }

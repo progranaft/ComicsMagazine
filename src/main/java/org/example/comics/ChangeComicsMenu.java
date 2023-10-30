@@ -2,7 +2,7 @@ package org.example.comics;
 
 public class ChangeComicsMenu implements ShowMenu {
         @Override
-    public String showMenuOptions() {
+    public String showMenuOptions(User user) {
         String str = "1. Изменить название" +
                 "\n2. Изменить автора" +
                 "\n3. Изменить дизайнера" +

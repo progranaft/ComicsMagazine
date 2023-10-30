@@ -10,13 +10,14 @@ public class MainController {
     protected Save save;
 
     public void start(){
+        System.out.println(this.openUsersFile());
         System.out.println(this.openSaveFile());
-        this.reception = save.getReception();
+        //this.reception = save.getReception();
         System.out.println(this.reception);
         this.shop = save.getShop();
         this.fabricComics = save.getFc();
         while (true) {
-            this.user = this.reception.authorization();
+            this.user = this.reception.authorization(this);
             if (this.user == null) break;
             this.shop.users.add(this.user);
             ComicsShopLive csl = new ComicsShopLive(this);
@@ -24,9 +25,53 @@ public class MainController {
         }
     }
 
+    private String openUsersFile() {
+        StringBuilder res = new StringBuilder();
+        File usersFile = new File("users.txt");
+        if (usersFile.exists()) {
+            try (FileInputStream fin = new FileInputStream(usersFile);
+                ObjectInputStream oin = new ObjectInputStream(fin);) {
+                this.reception = (Reception) oin.readObject();
+            } catch (ClassNotFoundException | IOException e) {
+                System.out.println("ошибка");
+            }
+            res.append("Список пользователей загружен");
+        } else {
+            this.reception = new Reception();
+            res.append("Создан новый список пользователей");
+        }
+        return res.toString();
+    }
+
+    public String saveUsersFile() {
+        StringBuilder res = new StringBuilder();
+        File saveUsers = new File("users.txt");
+        if (!saveUsers.exists()) {
+            try {
+                if (saveUsers.createNewFile()) {
+                    res.append("Файл сохранения создан");
+                } else {
+                    res.append("Something Wrong!");
+                }
+            } catch (IOException e) {
+                res.append("Ошибика");
+            }
+        } else {
+            res.append("Сохранение уже существует");
+        }
+        try (FileOutputStream fout = new FileOutputStream(saveUsers);
+             ObjectOutputStream oout = new ObjectOutputStream(fout);) {
+            oout.writeObject(this.reception);
+            res.append("Сохранение успешно перезаписано");
+        } catch (IOException e) {
+            res.append("Обшишббиикаа");
+        }
+        return res.toString();
+    }
+
     public void save(){
         Save save = new Save();
-        save.setReception(this.reception);
+        //save.setReception(this.reception);
         save.setFc(this.fabricComics);
         save.setShop(this.shop);
         FileOutputStream fout = null;

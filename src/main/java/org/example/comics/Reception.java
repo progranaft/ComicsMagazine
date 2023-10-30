@@ -9,10 +9,11 @@ import java.util.Scanner;
 public class Reception implements Serializable {
     HashMap<User, String> accounts;
     public Reception() {
-//        this.accounts = new HashMap<>();
-//        User admin = new User("Sasha");
-//        admin.setAdministrator(true);
-//        this.accounts.put(admin, "qwert");
+        this.accounts = new HashMap<>();
+
+        User admin = new User("Sasha");
+        admin.setAdministrator(true);
+        this.accounts.put(admin, "qwert");
 //        User test = new User("Test");
 //        test.setAdministrator(true);
 //        this.accounts.put(test, "12345");
@@ -21,11 +22,11 @@ public class Reception implements Serializable {
 //        this.accounts.put(test2, "12345");
     }
 
-    public User authorization() {
-        User res = null;
+    public User authorization(MainController mainController) {
+        User res = new User();
         while(true) {
             System.out.println("Добро пожаловать в Магазин Комиксов!");
-            Menu recMenu = new Menu(()->"1. Вход\n2. Регистрация\n3. Выход");
+            Menu recMenu = new Menu(res, (user)->"1. Вход\n2. Регистрация\n3. Выход");
             Integer choice = recMenu.showMenu();
             if (choice == 1) {
                 User user = this.getUser();
@@ -33,7 +34,7 @@ public class Reception implements Serializable {
                     res = user;
                     break;
                 } else {
-                    System.out.println("Комбинация логин/пароль не распознаны");
+                    System.out.println("Комбинация логин/пароль не распознана");
                     continue;
                 }
             } else if (choice == 2) {
@@ -47,6 +48,7 @@ public class Reception implements Serializable {
                 if (pass.equals(pass2)) {
                     this.accounts.put(new User(name), pass);
                     System.out.println("Пользователь добавлен");
+                    mainController.saveUsersFile();
                 } else {
                     System.out.println("Пароли не совпадают");
                 }

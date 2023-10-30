@@ -20,13 +20,7 @@ public class ComicsData implements Serializable {
 
     @Override
     public String toString() {
-        return "ComicsData{" +
-                "quantity=" + quantity +
-                ", dataReceipts=" + dataReceipts +
-                ", coastPrice=" + coastPrice +
-                ", salePrice=" + salePrice +
-                ", productId=" + productId +
-                '}';
+        return  quantity + "\t" + dataReceipts + "\t" + coastPrice + "\t" + salePrice + "\t" + productId;
     }
 
     public Integer getQuantity() {
