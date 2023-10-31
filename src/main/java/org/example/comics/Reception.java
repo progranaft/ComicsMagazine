@@ -28,6 +28,7 @@ public class Reception implements Serializable {
             System.out.println("Добро пожаловать в Магазин Комиксов!");
             Menu recMenu = new Menu(res, (user)->"1. Вход\n2. Регистрация\n3. Выход");
             Integer choice = recMenu.showMenu();
+            if (choice == null) continue;
             if (choice == 1) {
                 User user = this.getUser();
                 if (user != null) {

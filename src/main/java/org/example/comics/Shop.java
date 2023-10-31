@@ -10,9 +10,98 @@ import java.util.*;
 public class Shop implements Serializable {
     protected HashMap<Comics, ComicsData> comicsHashMap;
     protected HashSet<User> users;
+    protected SaleJournal saleJournal;
+    protected Double money;
     public Shop(){
         this.comicsHashMap = new HashMap<>();
         this.users = new HashSet<>();
+        this.saleJournal = new SaleJournal();
+        this.money = 0.;
+    }
+
+    public boolean sellComics(Comics comics, User user, Integer quantity){
+        boolean res = false;
+        if (this.comicsHashMap.get(comics).getQuantity() > quantity) {
+            this.comicsHashMap.get(comics).setQuantity(this.comicsHashMap.get(comics).getQuantity() - quantity);
+            this.money += this.comicsHashMap.get(comics).getSalePrice()*quantity;
+            this.saleJournal.addSaleRecords(comics, user, quantity, this.comicsHashMap.get(comics).getSalePrice());
+            res = true;
+        } else if (this.comicsHashMap.get(comics).getQuantity() == quantity) {
+            this.money += this.comicsHashMap.get(comics).getSalePrice()*quantity;
+            this.saleJournal.addSaleRecords(comics, user, quantity, this.comicsHashMap.get(comics).getSalePrice());
+            this.comicsHashMap.remove(comics);
+            res = true;
+        }
+        return res;
+    }
+
+    public String getTopComics(){
+        ArrayList<SaleRecord> tmp = new ArrayList<>();
+        for (SaleRecord saleRecord: saleJournal.getSaleRecords()){
+            boolean contains = false;
+            for (int i = 0; i < tmp.size(); i++) {
+                if (saleRecord.getComics().getName().equals(tmp.get(i).getComics().getName())) {
+                    contains = true;
+                }
+            }
+            if (contains) {
+                for (SaleRecord saleRecord1:tmp){
+                    if (saleRecord1.getComics().getName().equals(saleRecord.getComics().getName())) {
+                        saleRecord1.setQuantity(saleRecord1.getQuantity()+saleRecord.getQuantity());
+                    }
+                }
+            } else {
+                SaleRecord slrc = new SaleRecord();
+                slrc.setComics(saleRecord.getComics());
+                slrc.setQuantity(saleRecord.getQuantity());
+                tmp.add(slrc);
+            }
+        }
+        tmp.sort(new Comparator<SaleRecord>() {
+            @Override
+            public int compare(SaleRecord o1, SaleRecord o2) {
+                return o2.getQuantity()-o1.getQuantity();
+            }
+        });
+        StringBuilder res = new StringBuilder();
+        res.append(String.format("%20s %6s\n", "Название", "Кол-во"));
+        for(SaleRecord saleRecord:tmp){
+            res.append(String.format("%20s %6s\n" ,saleRecord.getComics().getName(), saleRecord.getQuantity()));
+        }
+        return res.toString();
+    }
+
+    public String getTopAuthors(){
+        ArrayList<Author> topAuthors = new ArrayList<>();
+        for (SaleRecord saleRecord: saleJournal.getSaleRecords()){
+            boolean contains = false;
+            for (Author author:topAuthors){
+                if (saleRecord.getComics().getAuthor().equals(author.getName())){
+                    contains = true;
+                }
+            }
+            if (contains) {
+                for (Author author:topAuthors){
+                    if (saleRecord.getComics().getAuthor().equals(author.getName())){
+                        author.setCountComics(author.getCountComics() + saleRecord.getQuantity());
+                    }
+                }
+            } else {
+                topAuthors.add(new Author(saleRecord.getComics().getAuthor(), saleRecord.getQuantity()));
+            }
+        }
+        topAuthors.sort(new Comparator<Author>() {
+            @Override
+            public int compare(Author o1, Author o2) {
+                return o2.getCountComics()-o1.getCountComics();
+            }
+        });
+        StringBuilder res = new StringBuilder();
+        res.append(String.format("%20s %6s\n", "Автор", "Кол-во"));
+        for (Author author:topAuthors){
+            res.append(String.format("%20s %6s\n", author.getName(), author.getCountComics()));
+        }
+        return res.toString();
     }
 
     public void addComics(Comics comics){

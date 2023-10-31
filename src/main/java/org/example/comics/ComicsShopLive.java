@@ -6,6 +6,7 @@ import org.example.sounds.Sound2;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -26,15 +27,59 @@ public class ComicsShopLive {
         }
     }
 
+    public boolean deal(Shop shop, User user){
+        boolean res = false;
+        Comics comics = null;
+        ComicsData comicsData = null;
+        Integer count = null;
+        while (true){
+            System.out.println("Введите название приобретаемого комикса или \"отмена\" для выхода: ");
+            Scanner scanner = new Scanner(System.in);
+            String comicsName = scanner.nextLine();
+            if (comicsName.equals("отмена")){
+                return false;
+            }
+            for (Map.Entry<Comics, ComicsData> item:shop.comicsHashMap.entrySet()){
+                if (item.getKey().getName().equals(comicsName)){
+                    comics = item.getKey();
+                    comicsData = item.getValue();
+                }
+            }
+            if (comics != null && comicsData != null) {
+                System.out.println("Комикс: " + comics.getName() + ". В наличие: " + comicsData.getQuantity() + " шт.");
+                break;
+            } else {
+                System.out.println("Комикс не найден.");
+            }
+        }
+        while(true){
+            System.out.println("Введите количество приобретаемых комиксов или \"0\" для выхода: ");
+            Integer quant = Inputs.inputInt();
+            if (quant == 0) {
+                return false;
+            }
+            if (quant <= comicsData.getQuantity()){
+                count = quant;
+                break;
+            } else {
+                System.out.println("В магазине нет столько комиксов");
+            }
+        }
+        shop.sellComics(comics, user, count);
+        return true;
+    }
+
     public void goAdmin(){
         //Админская менюшка
         Menu menu = new Menu(mainController.user , new MainMenu());
         while (true) {
             Integer choice = menu.showMenu();
+            if (choice == null) continue;
             if (choice == 1) { //Меню работы с магазином
                 Menu magazineMenu = new Menu(mainController.user, new MagazineMenu());
                 while (true){
                     Integer choice3 = magazineMenu.showMenu();
+                    if (choice3 == null) continue;
                     if (choice3 == 1) { //Добавление комикса в магазин
                         System.out.println(this.addComicsInShop());
                     } else if (choice3 == 2) { //Удаление комиксса из магазина
@@ -56,6 +101,10 @@ public class ComicsShopLive {
                         System.out.println(mainController.shop.getPremierComics(mainController.user));
                     } else if (choice3 == 6) { //Список новинок
                         System.out.println(mainController.shop.getNewComics(mainController.user));
+                    } else if (choice3 == 7) { //Купить комикс
+                        if (this.deal(mainController.shop, mainController.user)){
+                            System.out.println("Комикс приобретен");
+                        }
                     } else if (choice3 == 0) { //Возврат на предыдущую старницу меню
                         break;
                     }
@@ -64,6 +113,7 @@ public class ComicsShopLive {
                 Menu fabricMenu = new Menu(mainController.user, new FabricMenu());
                 while (true) {
                     Integer choice2 = fabricMenu.showMenu();
+                    if (choice2 == null) continue;
                     if (choice2 == 1) {
                         sound2 = new Sound2();
                         sound2.start();
@@ -93,8 +143,21 @@ public class ComicsShopLive {
                 }
             } else if (choice == 3) {
 
-            } else if (choice == 4) {
-
+            } else if (choice == 4) { //Журнал
+                Menu journalMenu = new Menu(mainController.user, new JournalMenu());
+                while (true){
+                    Integer choice4 = journalMenu.showMenu();
+                    if (choice4 == null) continue;
+                    if (choice4 == 1) {
+                        System.out.println(mainController.shop.saleJournal.toString());
+                    } else if (choice4 == 2) { //Топ комиксов
+                        System.out.println(mainController.shop.getTopComics());
+                    } else if (choice4 == 3) { // Топ авторов
+                        System.out.println(mainController.shop.getTopAuthors());
+                    } else if (choice4 == 0) {
+                        break;
+                    }
+                }
             } else if (choice == 5) {
 
             } else if (choice == 6) {
@@ -119,6 +182,7 @@ public class ComicsShopLive {
             } else if (choice == 0) {
                 Menu exitMenu = new Menu(mainController.user ,(user)->"Сохранить?\n1. Да\n2. Нет");
                 Integer input = exitMenu.showMenu();
+                if (input == null) continue;
                 if (input == 1) {
                     mainController.save();
                     break;
@@ -172,6 +236,10 @@ public class ComicsShopLive {
                         System.out.println(mainController.shop.getPremierComics(mainController.user));
                     } else if (choice3 == 4) { //Список новинок
                         System.out.println(mainController.shop.getNewComics(mainController.user));
+                    } else if (choice3 == 5 ) { // Купить комикс
+
+
+
                     } else if (choice3 == 0) { //Возврат на предыдущую старницу меню
                         break;
                     }

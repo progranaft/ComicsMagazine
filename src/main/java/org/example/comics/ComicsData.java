@@ -10,6 +10,8 @@ public class ComicsData implements Serializable {
     protected Double salePrice;
     protected Long productId;
 
+    protected Integer saleQuantity;
+
     public ComicsData(Integer quantity, LocalDate dataReceipts, Double coastPrice, Double salePrice, Long productId) {
         this.quantity = quantity;
         this.dataReceipts = dataReceipts;
