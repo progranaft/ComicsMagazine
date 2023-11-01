@@ -1,21 +1,30 @@
 package org.example.comics;
 
+import org.example.model.User;
+import org.example.sounds.Sound;
+import org.example.sounds.SoundBuffer;
+
 import java.io.*;
 
 public class MainController {
     protected User user;
     protected Reception reception;
     protected Shop shop;
-    protected FabricComics fabricComics;
+    protected BaseComics baseComics;
     protected Save save;
+    protected SoundBuffer soundBuffer;
+
+    public MainController(){}
+    public MainController(SoundBuffer soundBuffer){
+        this.soundBuffer = soundBuffer;
+    }
 
     public void start(){
         System.out.println(this.openUsersFile());
         System.out.println(this.openSaveFile());
-        //this.reception = save.getReception();
         System.out.println(this.reception);
         this.shop = save.getShop();
-        this.fabricComics = save.getFc();
+        this.baseComics = save.getFc();
         while (true) {
             this.user = this.reception.authorization(this);
             if (this.user == null) break;
@@ -72,7 +81,7 @@ public class MainController {
     public void save(){
         Save save = new Save();
         //save.setReception(this.reception);
-        save.setFc(this.fabricComics);
+        save.setFc(this.baseComics);
         save.setShop(this.shop);
         FileOutputStream fout = null;
         ObjectOutputStream oout = null;

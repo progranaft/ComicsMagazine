@@ -1,8 +1,9 @@
 package org.example.comics;
 
+import org.example.model.Comics;
+
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class StockSale implements Serializable {
     private String name;

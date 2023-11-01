@@ -1,10 +1,13 @@
 package org.example.comics;
 
-import javax.swing.text.DefaultCaret;
+import org.example.menu.Menu;
+import org.example.model.User;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Reception implements Serializable {
     HashMap<User, String> accounts;
@@ -26,7 +29,7 @@ public class Reception implements Serializable {
         User res = new User();
         while(true) {
             System.out.println("Добро пожаловать в Магазин Комиксов!");
-            Menu recMenu = new Menu(res, (user)->"1. Вход\n2. Регистрация\n3. Выход");
+            Menu recMenu = new Menu(res, (user)->"1. Вход\n2. Регистрация\n3. О программе\n4. Выход");
             Integer choice = recMenu.showMenu();
             if (choice == null) continue;
             if (choice == 1) {
@@ -54,6 +57,29 @@ public class Reception implements Serializable {
                     System.out.println("Пароли не совпадают");
                 }
             } else if (choice == 3) {
+                mainController.soundBuffer.getBackGround().stopPlay();
+                mainController.soundBuffer.getIntro().startPlay();
+                String text = new String("Экзаменационная работа \"Магазин Комиксов\"\n" +
+                        "Выполнил студент академии ТОП - ***** Александр\n" +
+                        "Музыка на фоне:\n" +
+                        "Kupla - Sea of Trees\n" +
+                        "OST Battle toads and Double Dragon\n" +
+                        "Выводится с помощью javazoom » jlayer https://mvnrepository.com/artifact/javazoom/jlayer/1.0.1\n" +
+                        "Скорость текста специально подбирал чтоб дослушать музыку до конца xD\n" +
+                        "Ну все, пока, жми Enter ;)");
+                for (int i = 0; i < text.length(); i++){
+                    System.out.print(text.charAt(i));
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(70);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                Scanner scanner = new Scanner(System.in);
+                String str = scanner.nextLine();
+                mainController.soundBuffer.getIntro().stopPlay();
+                mainController.soundBuffer.getBackGround().startPlay();
+            } else if (choice == 4) {
                 return null;
             }
         }

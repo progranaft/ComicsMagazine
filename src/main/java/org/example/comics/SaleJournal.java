@@ -1,5 +1,8 @@
 package org.example.comics;
 
+import org.example.model.Comics;
+import org.example.model.User;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;

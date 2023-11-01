@@ -1,17 +1,19 @@
 package org.example;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
 import org.example.comics.*;
 import org.example.sounds.Sound;
-
-import java.util.HashSet;
-import java.util.Scanner;
+import org.example.sounds.SoundBuffer;
 
 public class Main {
     public static void main(String[] args) {
 
-        MainController mainController = new MainController();
+//        Sound backSound = new Sound("snd.mp3");
+//        Sound createComics = new Sound("snd2.mp3");
+        SoundBuffer soundBuffer = new SoundBuffer();
+        soundBuffer.getBackGround().setDaemon(true);
+        soundBuffer.getCreateComics().setDaemon(true);
+        soundBuffer.getBackGround().startPlay();
+        MainController mainController = new MainController(soundBuffer);
         mainController.start();
 
     }

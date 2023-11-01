@@ -1,48 +1,40 @@
 package org.example.sounds;
 
-import javax.sound.sampled.*;
-import java.io.File;
-import java.io.IOException;
+import javazoom.jl.player.Player;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class Sound extends Thread{
-    protected Clip clip;
-    @Override
-    public void run() {
+
+    private Player player;
+    private String path;
+
+    public Sound(String path){
+        this.path = path;
+    }
+
+    public void startPlay(){
         try {
-            File soundFile = new File("track.wav"); //Звуковой файл
-
-            //Получаем AudioInputStream
-            //Вот тут могут полететь IOException и UnsupportedAudioFileException
-            AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
-
-            //Получаем реализацию интерфейса Clip
-            //Может выкинуть LineUnavailableException
-            clip = AudioSystem.getClip();
-
-            //Загружаем наш звуковой поток в Clip
-            //Может выкинуть IOException и LineUnavailableException
-            clip.open(ais);
-            //while (true) {
-                clip.setFramePosition(0); //устанавливаем указатель на старт
-                clip.start(); //Поехали!!!
-                //Thread.sleep(clip.getMicrosecondLength()/1000);
-                //clip.stop(); //Останавливаем
-                //clip.close(); //Закрываем
-            //}
-
-
-            //Если не запущено других потоков, то стоит подождать, пока клип не закончится
-            //В GUI-приложениях следующие 3 строчки не понадобятся
-
-
-        } catch (IOException | UnsupportedAudioFileException | LineUnavailableException exc) {
-            exc.printStackTrace();
+            FileInputStream fis = new FileInputStream(path);
+            player = new Player(fis);
+        } catch (FileNotFoundException | javazoom.jl.decoder.JavaLayerException e) {
+            e.printStackTrace();
         }
+        new Thread() {
+            public void run() {
+                try {
+                    player.play();
+                } catch (Exception e) {
+                    System.out.println("Error playing audio: " + e);
+                }
+            }
+        }.start();
     }
-    public Clip getClip() {
-        return clip;
-    }
-    public void setClip(Clip clip) {
-        this.clip = clip;
+
+    public void stopPlay(){
+        if (player != null) {
+            player.close();
+        }
     }
 }

@@ -1,19 +1,14 @@
 package org.example.comics;
 
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
-import org.example.sounds.Sound;
-import org.example.sounds.Sound2;
+import org.example.menu.*;
+import org.example.model.Comics;
+import org.example.model.User;
 
-import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class ComicsShopLive {
-    Sound sound;
-    Sound2 sound2;
     MainController mainController;
     public ComicsShopLive(MainController mainController){
         this.mainController = mainController;
@@ -116,9 +111,9 @@ public class ComicsShopLive {
                     Integer choice2 = fabricMenu.showMenu();
                     if (choice2 == null) continue;
                     if (choice2 == 1) {
-                        sound2 = new Sound2();
-                        sound2.start();
-                        Comics comics = mainController.fabricComics.createComics();
+                        mainController.soundBuffer.getBackGround().stopPlay();
+                        mainController.soundBuffer.getCreateComics().startPlay();
+                        Comics comics = mainController.baseComics.createComics();
                         if (comics != null) {
                             Scanner in = new Scanner(System.in);
                             Menu addInMagazine = new Menu(mainController.user, (user)->"Добавить комикс в магазин?\n1. Да\n2. Нет");
@@ -129,15 +124,14 @@ public class ComicsShopLive {
                                 }
                             }
                         }
-                        sound2.getClip().stop();
-                        sound2.getClip().close();
-                        sound = null;
+                        mainController.soundBuffer.getCreateComics().stopPlay();
+                        mainController.soundBuffer.getBackGround().startPlay();
                     } else if (choice2 == 2) {
 
                     } else if (choice2 == 3) {
-                        System.out.println(mainController.fabricComics.showComics());
+                        System.out.println(mainController.baseComics.showComics());
                     } else if (choice2 == 4) { // Изменение комиксов
-                        mainController.fabricComics.changeComics();
+                        mainController.baseComics.changeComics();
                     } else if (choice2 == 0) {
                         break;
                     }
@@ -196,8 +190,6 @@ public class ComicsShopLive {
                         System.out.println(mainController.shop.showStockSales());
                     } else if (choice6 == 4) {//Добавить комикс в акцию
 
-
-
                     } else if (choice6 == 0) {
                         break;
                     }
@@ -206,19 +198,6 @@ public class ComicsShopLive {
 
             } else if (choice == 9) {
                 mainController.save();
-            } else if (choice == 879546) {
-                if (sound == null) {
-                    Inputs.pegs = true;
-                    sound = new Sound();
-                    sound.start();
-                    //Inputs.funky();
-                } else {
-                    Inputs.pegs = false;
-                    sound.getClip().stop();
-                    sound.getClip().close();
-                    sound.interrupt();
-                    sound = null;
-                }
             } else if (choice == 0) {
                 Menu exitMenu = new Menu(mainController.user ,(user)->"Сохранить?\n1. Да\n2. Нет");
                 Integer input = exitMenu.showMenu();
@@ -244,7 +223,7 @@ public class ComicsShopLive {
         Scanner scan = new Scanner(System.in);
         System.out.println("Введите название комикса:");
         String str = scan.nextLine();
-        Comics cms = mainController.fabricComics.checkComics(str);
+        Comics cms = mainController.baseComics.checkComics(str);
         if (cms != null) {
             mainController.shop.addComics(cms);
             res = "Комикс добавлен в магазин";
@@ -324,8 +303,8 @@ public class ComicsShopLive {
     }
 
     public void addTestComics(){
-        mainController.shop.comicsHashMap.put(mainController.fabricComics.getSpiderMan(), new ComicsData(9, LocalDate.of(2022, 10, 1), 12.0, 34.0, 12345L));
-        mainController.shop.comicsHashMap.put(mainController.fabricComics.getAvengers2(), new ComicsData(7, LocalDate.of(2023, 5, 23), 10.0, 53.0, 1234523L));
+        mainController.shop.comicsHashMap.put(mainController.baseComics.getSpiderMan(), new ComicsData(9, LocalDate.of(2022, 10, 1), 12.0, 34.0, 12345L));
+        mainController.shop.comicsHashMap.put(mainController.baseComics.getAvengers2(), new ComicsData(7, LocalDate.of(2023, 5, 23), 10.0, 53.0, 1234523L));
     }
 
 }

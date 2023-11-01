@@ -3,12 +3,12 @@ package org.example.comics;
 import java.io.Serializable;
 
 public class Save implements Serializable {
-    private FabricComics fc;
+    private BaseComics fc;
     private Shop shop;
     //private Reception reception;
 
     public Save(){
-        this.fc = new FabricComics();
+        this.fc = new BaseComics();
         this.shop = new Shop();
         //this.reception = new Reception();
     }
@@ -19,11 +19,11 @@ public class Save implements Serializable {
 //    public void setReception(Reception reception) {
 //        this.reception = reception;
 //    }
-    public FabricComics getFc() {
+    public BaseComics getFc() {
         return fc;
     }
 
-    public void setFc(FabricComics fc) {
+    public void setFc(BaseComics fc) {
         this.fc = fc;
     }
 
