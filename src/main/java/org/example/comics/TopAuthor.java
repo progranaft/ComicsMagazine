@@ -1,10 +1,10 @@
 package org.example.comics;
 
-public class Author {
+public class TopAuthor {
     private String name;
     private Integer countComics;
 
-    public Author(String name, Integer countComics) {
+    public TopAuthor(String name, Integer countComics) {
         this.name = name;
         this.countComics = countComics;
     }

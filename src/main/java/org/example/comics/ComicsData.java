@@ -8,9 +8,9 @@ public class ComicsData implements Serializable {
     protected LocalDate dataReceipts;
     protected Double coastPrice;
     protected Double salePrice;
+    protected Double stockSalePrice;
     protected Long productId;
-
-    protected Integer saleQuantity;
+    protected StockSale stockSale;
 
     public ComicsData(Integer quantity, LocalDate dataReceipts, Double coastPrice, Double salePrice, Long productId) {
         this.quantity = quantity;
@@ -18,6 +18,8 @@ public class ComicsData implements Serializable {
         this.coastPrice = coastPrice;
         this.salePrice = salePrice;
         this.productId = productId;
+        this.stockSalePrice = null;
+        this.stockSale = null;
     }
 
     @Override

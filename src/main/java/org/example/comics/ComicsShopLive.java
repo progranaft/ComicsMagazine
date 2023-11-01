@@ -1,5 +1,6 @@
 package org.example.comics;
 
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import org.example.sounds.Sound;
 import org.example.sounds.Sound2;
 
@@ -151,18 +152,57 @@ public class ComicsShopLive {
                     if (choice4 == 1) {
                         System.out.println(mainController.shop.saleJournal.toString());
                     } else if (choice4 == 2) { //Топ комиксов
-                        System.out.println(mainController.shop.getTopComics());
+                        Menu period = new Menu(mainController.user, new PeriodMenu());
+                        while (true) {
+                            Integer choice5 = period.showMenu();
+                            if (choice5 == null) continue;
+                            if (choice5 == 1) { //За день
+                                System.out.println(mainController.shop.getTopComics(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1)));
+                            } else if (choice5 == 2) {//За месяц
+                                System.out.println(mainController.shop.getTopComics(LocalDate.now().minusMonths(1), LocalDate.now().plusDays(1)));
+                            } else if (choice5 == 3) {//За год
+                                System.out.println(mainController.shop.getTopComics(LocalDate.now().minusYears(1), LocalDate.now().plusDays(1)));
+                            } else if (choice5 == 0) {
+                                break;
+                            }
+                        }
                     } else if (choice4 == 3) { // Топ авторов
-                        System.out.println(mainController.shop.getTopAuthors());
+                        Menu period = new Menu(mainController.user, new PeriodMenu());
+                        while (true) {
+                            Integer choice5 = period.showMenu();
+                            if (choice5 == null) continue;
+                            if (choice5 == 1) { //За день
+                                System.out.println(mainController.shop.getTopAuthors(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1)));
+                            } else if (choice5 == 2) {//За месяц
+                                System.out.println(mainController.shop.getTopAuthors(LocalDate.now().minusMonths(1), LocalDate.now().plusDays(1)));
+                            } else if (choice5 == 3) {//За год
+                                System.out.println(mainController.shop.getTopAuthors(LocalDate.now().minusYears(1), LocalDate.now().plusDays(1)));
+                            } else if (choice5 == 0) {
+                                break;
+                            }
+                        }
                     } else if (choice4 == 0) {
                         break;
                     }
                 }
             } else if (choice == 5) {
+                Menu actionsMenu = new Menu(mainController.user, new ActionsMenu());
+                while (true){
+                    Integer choice6 = actionsMenu.showMenu();
+                    if (choice6 == null) continue;
+                    if (choice6 == 1) { //Создать акцию
+                        mainController.shop.createStockSale();
+                    } else if (choice6 == 3) {//Просмотр списска акций
+                        System.out.println(mainController.shop.showStockSales());
+                    } else if (choice6 == 4) {//Добавить комикс в акцию
 
+
+
+                    } else if (choice6 == 0) {
+                        break;
+                    }
+                }
             } else if (choice == 6) {
-
-
 
             } else if (choice == 9) {
                 mainController.save();

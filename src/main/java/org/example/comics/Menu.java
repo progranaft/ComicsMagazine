@@ -1,17 +1,15 @@
 package org.example.comics;
 
-import java.util.Scanner;
-
 public class Menu {
-    private ShowMenu showMenu;
+    private ShowMenu shMenu;
     private User user;
-    public Menu(User user, ShowMenu showMenu){
-        this.showMenu = showMenu;
+    public Menu(User user, ShowMenu shMenu){
+        this.shMenu = shMenu;
         this.user = user;
     }
     public Integer showMenu(){
         Integer choice = null;
-        System.out.println(showMenu.showMenuOptions(user));
+        System.out.println(shMenu.showMenuOptions(user));
         choice = Inputs.inputInt();
         return choice;
     }

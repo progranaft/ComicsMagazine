@@ -1,22 +1,51 @@
 package org.example.comics;
 
-import javafx.scene.shape.ClosePathBuilder;
-
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.*;
 
 public class Shop implements Serializable {
     protected HashMap<Comics, ComicsData> comicsHashMap;
+    protected HashSet<StockSale> stockSales;
     protected HashSet<User> users;
     protected SaleJournal saleJournal;
     protected Double money;
     public Shop(){
         this.comicsHashMap = new HashMap<>();
+        this.stockSales = new HashSet<>();
         this.users = new HashSet<>();
         this.saleJournal = new SaleJournal();
         this.money = 0.;
+    }
+
+    public void createStockSale(){
+        StockSale stockSale = new StockSale();
+        System.out.println("Введите название акции: ");
+        Scanner scanner = new Scanner(System.in);
+        stockSale.setName(scanner.nextLine());
+        System.out.println("Добавьте краткое описание: ");
+        stockSale.setDescription(scanner.nextLine());
+        System.out.println("Укажите размер скидки в процентах:");
+        stockSale.setDiscount((Inputs.inputInt().doubleValue())/100);
+        System.out.println("Укажите дату начала акции (ГГГГ-ММ-ДД): ");
+        stockSale.setStartActions(Inputs.inputDate());
+        System.out.println("Укажите дату конца акции (ГГГГ-ММ-ДД): ");
+        stockSale.setEndActions(Inputs.inputDate());
+        stockSales.add(stockSale);
+        System.out.println("Акция успешно создана.");
+    }
+
+    public void addComicsInAction(){
+
+    }
+
+    public String showStockSales(){
+        StringBuilder res = new StringBuilder();
+        res.append(String.format("%15s %6s %11s %11s %30s\n", "Название", "Скидка", "Начало", "Конец", "Инфо"));
+        for (StockSale stockSale:this.stockSales){
+            res.append(String.format("%15s %6s%% %11s %11s %30s\n", stockSale.getName(), (int)(stockSale.getDiscount()*100), stockSale.getStartActions(), stockSale.getEndActions(), stockSale.getDescription()));
+        }
+        return res.toString();
     }
 
     public boolean sellComics(Comics comics, User user, Integer quantity){
@@ -35,71 +64,65 @@ public class Shop implements Serializable {
         return res;
     }
 
-    public String getTopComics(){
-        ArrayList<SaleRecord> tmp = new ArrayList<>();
-        for (SaleRecord saleRecord: saleJournal.getSaleRecords()){
-            boolean contains = false;
-            for (int i = 0; i < tmp.size(); i++) {
-                if (saleRecord.getComics().getName().equals(tmp.get(i).getComics().getName())) {
-                    contains = true;
-                }
-            }
-            if (contains) {
-                for (SaleRecord saleRecord1:tmp){
-                    if (saleRecord1.getComics().getName().equals(saleRecord.getComics().getName())) {
-                        saleRecord1.setQuantity(saleRecord1.getQuantity()+saleRecord.getQuantity());
+    public String getTopComics(LocalDate dateStart, LocalDate dateEnd){
+        ArrayList<TopComics> tmp = new ArrayList<>();
+        Integer index = null;
+        for (SaleRecord saleRecord:saleJournal.getSaleRecords()){
+            if (saleRecord.getSaleDate().isAfter(dateStart) && saleRecord.getSaleDate().isBefore(dateEnd)){
+                for (int i = 0; i < tmp.size(); i++){
+                    if (saleRecord.getComics().getName().equals(tmp.get(i).getName())){
+                        index = i;
                     }
                 }
-            } else {
-                SaleRecord slrc = new SaleRecord();
-                slrc.setComics(saleRecord.getComics());
-                slrc.setQuantity(saleRecord.getQuantity());
-                tmp.add(slrc);
+                if (index != null) {
+                    tmp.get(index).setQuantity(tmp.get(index).getQuantity() + saleRecord.getQuantity());
+                } else {
+                    tmp.add(new TopComics(saleRecord.getComics().getName(), saleRecord.getQuantity()));
+                }
             }
         }
-        tmp.sort(new Comparator<SaleRecord>() {
+        tmp.sort(new Comparator<TopComics>() {
             @Override
-            public int compare(SaleRecord o1, SaleRecord o2) {
+            public int compare(TopComics o1, TopComics o2) {
                 return o2.getQuantity()-o1.getQuantity();
             }
         });
         StringBuilder res = new StringBuilder();
-        res.append(String.format("%20s %6s\n", "Название", "Кол-во"));
-        for(SaleRecord saleRecord:tmp){
-            res.append(String.format("%20s %6s\n" ,saleRecord.getComics().getName(), saleRecord.getQuantity()));
+        res.append(dateStart).append(" ").append(dateEnd).append("\n");
+        res.append(String.format("%20s %6s\n", "Комикс", "Кол-во"));
+        for (TopComics topComics:tmp){
+            res.append(String.format("%20s %6s\n", topComics.getName(), topComics.getQuantity()));
         }
         return res.toString();
     }
 
-    public String getTopAuthors(){
-        ArrayList<Author> topAuthors = new ArrayList<>();
+    public String getTopAuthors(LocalDate dateStart, LocalDate dateEnd){
+        ArrayList<TopAuthor> topTopAuthors = new ArrayList<>();
         for (SaleRecord saleRecord: saleJournal.getSaleRecords()){
-            boolean contains = false;
-            for (Author author:topAuthors){
-                if (saleRecord.getComics().getAuthor().equals(author.getName())){
-                    contains = true;
-                }
-            }
-            if (contains) {
-                for (Author author:topAuthors){
-                    if (saleRecord.getComics().getAuthor().equals(author.getName())){
-                        author.setCountComics(author.getCountComics() + saleRecord.getQuantity());
+            if (saleRecord.getSaleDate().isAfter(dateStart) && saleRecord.getSaleDate().isBefore(dateEnd)){
+                Integer index = null;
+                for (int i = 0; i < topTopAuthors.size(); i++){
+                    if (saleRecord.getComics().getAuthor().equals(topTopAuthors.get(i).getName())){
+                        index = i;
                     }
                 }
-            } else {
-                topAuthors.add(new Author(saleRecord.getComics().getAuthor(), saleRecord.getQuantity()));
+                if (index != null) {
+                    topTopAuthors.get(index).setCountComics(topTopAuthors.get(index).getCountComics() + saleRecord.getQuantity());
+                } else {
+                    topTopAuthors.add(new TopAuthor(saleRecord.getComics().getAuthor(), saleRecord.getQuantity()));
+                }
             }
         }
-        topAuthors.sort(new Comparator<Author>() {
+        topTopAuthors.sort(new Comparator<TopAuthor>() {
             @Override
-            public int compare(Author o1, Author o2) {
+            public int compare(TopAuthor o1, TopAuthor o2) {
                 return o2.getCountComics()-o1.getCountComics();
             }
         });
         StringBuilder res = new StringBuilder();
         res.append(String.format("%20s %6s\n", "Автор", "Кол-во"));
-        for (Author author:topAuthors){
-            res.append(String.format("%20s %6s\n", author.getName(), author.getCountComics()));
+        for (TopAuthor topAuthor : topTopAuthors){
+            res.append(String.format("%20s %6s\n", topAuthor.getName(), topAuthor.getCountComics()));
         }
         return res.toString();
     }
