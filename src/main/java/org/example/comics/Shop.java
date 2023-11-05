@@ -1,5 +1,7 @@
 package org.example.comics;
 
+import org.example.comics.stock.Stock;
+import org.example.comics.stock.StockSale;
 import org.example.model.Comics;
 import org.example.model.ComicsLegacy;
 import org.example.model.User;
@@ -10,58 +12,49 @@ import java.util.*;
 
 public class Shop implements Serializable {
     protected HashMap<Comics, ComicsData> comicsHashMap;
-    protected HashSet<StockSale> stockSales;
     protected HashSet<User> users;
     protected SaleJournal saleJournal;
+    protected Stock stock;
     protected Double money;
     public Shop(){
         this.comicsHashMap = new HashMap<>();
-        this.stockSales = new HashSet<>();
+        this.stock = new Stock();
         this.users = new HashSet<>();
         this.saleJournal = new SaleJournal();
         this.money = 0.;
     }
 
-    public void createStockSale(){
-        StockSale stockSale = new StockSale();
-        System.out.println("Введите название акции: ");
-        Scanner scanner = new Scanner(System.in);
-        stockSale.setName(scanner.nextLine());
-        System.out.println("Добавьте краткое описание: ");
-        stockSale.setDescription(scanner.nextLine());
-        System.out.println("Укажите размер скидки в процентах:");
-        stockSale.setDiscount((Inputs.inputInt().doubleValue())/100);
-        System.out.println("Укажите дату начала акции (ГГГГ-ММ-ДД): ");
-        stockSale.setStartActions(Inputs.inputDate());
-        System.out.println("Укажите дату конца акции (ГГГГ-ММ-ДД): ");
-        stockSale.setEndActions(Inputs.inputDate());
-        stockSales.add(stockSale);
-        System.out.println("Акция успешно создана.");
-    }
-
-    public void addComicsInAction(){
-
-    }
-
-    public String showStockSales(){
-        StringBuilder res = new StringBuilder();
-        res.append(String.format("%15s %6s %11s %11s %30s\n", "Название", "Скидка", "Начало", "Конец", "Инфо"));
-        for (StockSale stockSale:this.stockSales){
-            res.append(String.format("%15s %6s%% %11s %11s %30s\n", stockSale.getName(), (int)(stockSale.getDiscount()*100), stockSale.getStartActions(), stockSale.getEndActions(), stockSale.getDescription()));
+    public int addComicsInStock(String comicsName, String stockSaleName) {
+        Map.Entry<Comics, ComicsData> comics = getComics(comicsName);
+        StockSale stockSale = stock.getStockSale(stockSaleName);
+        if (comics != null && stockSale != null) {
+            comics.getValue().setStockSale(stockSale);
+            return 0;
+        } else {
+            return -1;
         }
-        return res.toString();
+    }
+
+    public Map.Entry<Comics, ComicsData> getComics(String name){
+        Map.Entry<Comics, ComicsData> res = null;
+        for (Map.Entry<Comics, ComicsData> entry:this.comicsHashMap.entrySet()) {
+            if (entry.getKey().getName().equals(name)){
+                res = entry;
+            }
+        }
+        return res;
     }
 
     public boolean sellComics(Comics comics, User user, Integer quantity){
         boolean res = false;
         if (this.comicsHashMap.get(comics).getQuantity() > quantity) {
             this.comicsHashMap.get(comics).setQuantity(this.comicsHashMap.get(comics).getQuantity() - quantity);
-            this.money += this.comicsHashMap.get(comics).getSalePrice()*quantity;
-            this.saleJournal.addSaleRecords(comics, user, quantity, this.comicsHashMap.get(comics).getSalePrice());
+            this.money += this.comicsHashMap.get(comics).transactionPrice()*quantity;
+            this.saleJournal.addSaleRecords(comics, user, quantity, this.comicsHashMap.get(comics).transactionPrice()*quantity);
             res = true;
         } else if (this.comicsHashMap.get(comics).getQuantity() == quantity) {
-            this.money += this.comicsHashMap.get(comics).getSalePrice()*quantity;
-            this.saleJournal.addSaleRecords(comics, user, quantity, this.comicsHashMap.get(comics).getSalePrice());
+            this.money += this.comicsHashMap.get(comics).transactionPrice()*quantity;
+            this.saleJournal.addSaleRecords(comics, user, quantity, this.comicsHashMap.get(comics).transactionPrice()*quantity);
             this.comicsHashMap.remove(comics);
             res = true;
         }
@@ -70,9 +63,9 @@ public class Shop implements Serializable {
 
     public String getTopComics(LocalDate dateStart, LocalDate dateEnd){
         ArrayList<TopComics> tmp = new ArrayList<>();
-        Integer index = null;
         for (SaleRecord saleRecord:saleJournal.getSaleRecords()){
             if (saleRecord.getSaleDate().isAfter(dateStart) && saleRecord.getSaleDate().isBefore(dateEnd)){
+                Integer index = null;
                 for (int i = 0; i < tmp.size(); i++){
                     if (saleRecord.getComics().getName().equals(tmp.get(i).getName())){
                         index = i;
@@ -162,16 +155,24 @@ public class Shop implements Serializable {
         StringBuilder res = new StringBuilder();
         if (user.isAdministrator()) {
             res.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-            res.append(String.format("| %20s | %10s | %10s | %10s | %15s | %5s | %15s | %8s | %10s | %7s | %6s | %5s | %5s | %20s |\n",
-                    "Название", "Жанр", "Дт. созд.", "FabricID", "Издательство", "Стр.", "Дизайнер", "Автор", "Дт. завоза", "MgzId", "Кол-во", "Закуп", "Цена", "Предистория"));
+            res.append(String.format("| %20s | %10s | %10s | %10s | %15s | %5s | %15s | %8s | %10s | %7s | %6s | %5s | %10s | %20s |\n",
+                    "Название", "Жанр", "Дт. созд.", "FabricID", "Издательство", "Стр.", "Дизайнер", "Автор", "Дт. завоза", "MgzId", "Кол-во", "Закуп", "Цена/Акция", "Предистория"));
             res.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
             for(Map.Entry<Comics, ComicsData> comic:comicsHashMap.entrySet()){
                 Comics tmp = comic.getKey();
                 ComicsData tmp2 = comic.getValue();
-                res.append(String.format("| %20s | %10s | %10s | %10s | %15s | %5s | %15s | %8s | %10s | %7s | %6s | %5s | %5s |",
+                StringBuilder resPrice = new StringBuilder();
+                if (tmp2.getStockSale() != null && LocalDate.now().isAfter(tmp2.getStockSale().getStartActions()) && LocalDate.now().isBefore(tmp2.getStockSale().getEndActions())) {
+                    //Double result = tmp2.getSalePrice()*(1-tmp2.stockSale.getDiscount());
+                    resPrice.append(tmp2.getSalePrice()).append("/");
+                    resPrice.append(String.format("%.2f", tmp2.getStockSalePrice()));
+                } else {
+                    resPrice.append(tmp2.getSalePrice());
+                }
+                res.append(String.format("| %20s | %10s | %10s | %10s | %15s | %5s | %15s | %8s | %10s | %7s | %6s | %5s | %10s |",
                         tmp.getName(), tmp.getGenre(), tmp.getPublicationDate().toString(),
                         tmp.getFabricId(), tmp.getPublishingHouse(), tmp.getPages(), tmp.getDesigner(), tmp.getAuthor(),
-                        tmp2.getDataReceipts(), tmp2.getProductId(), tmp2.getQuantity(), tmp2.getCoastPrice(), tmp2.getSalePrice()));
+                        tmp2.getDataReceipts(), tmp2.getProductId(), tmp2.getQuantity(), tmp2.getCoastPrice(), resPrice));
                 if (tmp instanceof ComicsLegacy) {
                     ComicsLegacy tmpLeg = (ComicsLegacy) tmp;
                     res.append(String.format(" %20s |\n", tmpLeg.getLegacy().getName()));
@@ -181,13 +182,21 @@ public class Shop implements Serializable {
             }
             res.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
         } else {
-            res.append(String.format("| %20s | %10s | %10s | %15s | %5s | %15s | %8s | %10s | %7s | %6s | %5s | %15s |\n",
-                    "Название", "Жанр", "Дт. созд.", "Издательство", "Стр.", "Дизайнер", "Автор", "Дт. завоза", "MgzId", "Кол-во", "Цена", "Предистория"));
+            res.append(String.format("| %20s | %10s | %10s | %15s | %5s | %15s | %8s | %10s | %7s | %6s | %10s | %20s |\n",
+                    "Название", "Жанр", "Дт. созд.", "Издательство", "Стр.", "Дизайнер", "Автор", "Дт. завоза", "MgzId", "Кол-во", "Цена/Акция", "Предистория"));
             res.append("-------------------------------------------------------------------------------------------------------------------------------------------------------\n");
             for(Map.Entry<Comics, ComicsData> comic:this.comicsHashMap.entrySet()){
                 Comics tmp = comic.getKey();
                 ComicsData tmp2 = comic.getValue();
-                res.append(String.format("| %20s | %10s | %10s | %12s | %5s | %8s | %8s | %10s | %7s | %6s | %5s |",
+                StringBuilder resPrice = new StringBuilder();
+                if (tmp2.getStockSale() != null && LocalDate.now().isAfter(tmp2.getStockSale().getStartActions()) && LocalDate.now().isBefore(tmp2.getStockSale().getEndActions())) {
+                    //Double result = tmp2.getSalePrice()*(1-tmp2.stockSale.getDiscount());
+                    resPrice.append(tmp2.getSalePrice()).append("/");
+                    resPrice.append(String.format("%.2f", tmp2.getStockSalePrice()));
+                } else {
+                    resPrice.append(tmp2.getSalePrice());
+                }
+                res.append(String.format("| %20s | %10s | %10s | %12s | %5s | %8s | %8s | %10s | %7s | %6s | %10s |",
                         tmp.getName(), tmp.getGenre(), tmp.getPublicationDate().toString(),
                         tmp.getPublishingHouse(), tmp.getPages(), tmp.getDesigner(), tmp.getAuthor(),
                         tmp2.getDataReceipts(), tmp2.getProductId(), tmp2.getQuantity(), tmp2.getCoastPrice(), tmp2.getSalePrice()));
@@ -294,5 +303,13 @@ public class Shop implements Serializable {
             }
         }
         return this.showComicsList(res, user);
+    }
+
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 }

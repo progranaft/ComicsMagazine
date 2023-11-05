@@ -64,7 +64,7 @@ public class Reception implements Serializable {
                         "Музыка на фоне:\n" +
                         "Kupla - Sea of Trees\n" +
                         "OST Battle toads and Double Dragon\n" +
-                        "Выводится с помощью javazoom » jlayer https://mvnrepository.com/artifact/javazoom/jlayer/1.0.1\n" +
+                        "Воспроизводится с помощью javazoom » jlayer https://mvnrepository.com/artifact/javazoom/jlayer/1.0.1\n" +
                         "Скорость текста специально подбирал чтоб дослушать музыку до конца xD\n" +
                         "Ну все, пока, жми Enter ;)");
                 for (int i = 0; i < text.length(); i++){

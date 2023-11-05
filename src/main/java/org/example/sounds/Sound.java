@@ -5,7 +5,7 @@ import javazoom.jl.player.Player;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class Sound extends Thread{
+public class Sound {
 
     private Player player;
     private String path;

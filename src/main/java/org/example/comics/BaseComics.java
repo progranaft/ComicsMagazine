@@ -222,4 +222,15 @@ public class BaseComics implements Serializable {
         this.comicsSet.add(spiderMan);
         return spiderMan;
     }
+    public Comics getBatman(){
+        Comics batman = new Comics("Tom", "Yam", "Batman", LocalDate.of(1963, 10, 27), 231, "DC", "Fantastic", "LDKOIDGHIJ");
+        this.comicsSet.add(batman);
+        return batman;
+    }
+    public ComicsLegacy getBatmanEvolution(){
+        Comics bat = this.getBatman();
+        ComicsLegacy batman = new ComicsLegacy("Tom", "Yam", "Batman Evolution", LocalDate.of(1964, 5, 2), 333, "DC", "Fantastic", "LDKOIDGHIJ", bat);
+        this.comicsSet.add(batman);
+        return batman;
+    }
 }

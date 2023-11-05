@@ -11,18 +11,18 @@ public class SaleRecord implements Serializable {
     private User user;
     private Integer quantity;
     private LocalDate saleDate;
-    private Double salePrice;
+    private Double transactionPrice;
 
     public SaleRecord(){
 
     }
 
-    public SaleRecord(Comics comics, User user, Integer quantity, LocalDate saleDate, Double salePrice) {
+    public SaleRecord(Comics comics, User user, Integer quantity, LocalDate saleDate, Double transactionPrice) {
         this.comics = comics;
         this.user = user;
         this.quantity = quantity;
         this.saleDate = saleDate;
-        this.salePrice = salePrice;
+        this.transactionPrice = transactionPrice;
     }
 
     public Comics getComics() {
@@ -57,11 +57,11 @@ public class SaleRecord implements Serializable {
         this.saleDate = saleDate;
     }
 
-    public Double getSalePrice() {
-        return salePrice;
+    public Double getTransactionPrice() {
+        return transactionPrice;
     }
 
-    public void setSalePrice(Double salePrice) {
-        this.salePrice = salePrice;
+    public void setTransactionPrice(Double transactionPrice) {
+        this.transactionPrice = transactionPrice;
     }
 }

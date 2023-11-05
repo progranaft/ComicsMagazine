@@ -1,9 +1,8 @@
 package org.example.sounds;
 
-public class SoundBuffer {
+public class SoundBuffer extends Thread {
     private Sound backGround;
     private Sound createComics;
-
     private Sound intro;
 
     public SoundBuffer () {

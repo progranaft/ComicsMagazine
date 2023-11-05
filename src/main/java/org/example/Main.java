@@ -10,8 +10,10 @@ public class Main {
 //        Sound backSound = new Sound("snd.mp3");
 //        Sound createComics = new Sound("snd2.mp3");
         SoundBuffer soundBuffer = new SoundBuffer();
-        soundBuffer.getBackGround().setDaemon(true);
-        soundBuffer.getCreateComics().setDaemon(true);
+        soundBuffer.setDaemon(true);
+//        soundBuffer.getBackGround().setDaemon(true);
+//        soundBuffer.getCreateComics().setDaemon(true);
+//        soundBuffer.getIntro().setDaemon(true);
         soundBuffer.getBackGround().startPlay();
         MainController mainController = new MainController(soundBuffer);
         mainController.start();

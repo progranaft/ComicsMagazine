@@ -18,17 +18,8 @@ public class ComicsLegacy extends Comics implements Serializable {
 
     @Override
     public String toString() {
-        return "ComicsLegacy{" +
-                "legacy=" + legacy.getName() +
-                ", fabricId='" + fabricId + '\'' +
-                ", author='" + author + '\'' +
-                ", designer='" + designer + '\'' +
-                ", name='" + name + '\'' +
-                ", publicationDate=" + publicationDate +
-                ", pages=" + pages +
-                ", publishingHouse='" + publishingHouse + '\'' +
-                ", genre='" + genre + '\'' +
-                '}';
+        return  "\t\t\t" + name + "\t\t\t" + genre + "\t\t\t" + publicationDate + "\t\t\t" + fabricId + "\t\t\t" + publishingHouse +
+                "\t\t\t" + pages + "\t\t\t" + designer + "\t\t\t" + author + "\t\t\t" + this.legacy.getName();
     }
 
     public Comics getLegacy() {

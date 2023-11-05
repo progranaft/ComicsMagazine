@@ -27,7 +27,10 @@ public class MainController {
         this.baseComics = save.getFc();
         while (true) {
             this.user = this.reception.authorization(this);
-            if (this.user == null) break;
+            if (this.user == null) {
+                soundBuffer.getBackGround().stopPlay();
+                break;
+            }
             this.shop.users.add(this.user);
             ComicsShopLive csl = new ComicsShopLive(this);
             csl.go();

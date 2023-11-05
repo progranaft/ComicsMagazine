@@ -13,6 +13,8 @@ public class SaleJournal implements Serializable {
     public SaleJournal(){
         this.saleRecords = new ArrayList<>();
     }
+
+
     public void addSaleRecords(Comics comics, User user, Integer quantity, Double salePrice){
         SaleRecord saleRecord = new SaleRecord(comics, user, quantity, LocalDate.now(), salePrice);
         saleRecords.add(saleRecord);
@@ -29,11 +31,11 @@ public class SaleJournal implements Serializable {
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder();
-        res.append(String.format("| %15s | %20s | %15s | %6s |\n",
-                "Дата продажи", "Комикс", "Покупатель", "Кол-во"));
+        res.append(String.format("| %15s | %20s | %15s | %6s | %5s |\n",
+                "Дата продажи", "Комикс", "Покупатель", "Кол-во", "Стоимость"));
         for (SaleRecord saleRecord:saleRecords){
-            res.append(String.format("| %15s | %20s | %15s | %6s |\n",
-                    saleRecord.getSaleDate(), saleRecord.getComics().getName(), saleRecord.getUser().getName(), saleRecord.getQuantity()));
+            res.append(String.format("| %15s | %20s | %15s | %6s | %5s |\n",
+                    saleRecord.getSaleDate(), saleRecord.getComics().getName(), saleRecord.getUser().getName(), saleRecord.getQuantity(), saleRecord.getTransactionPrice()));
         }
         return res.toString();
     }

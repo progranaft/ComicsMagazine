@@ -3,6 +3,7 @@ package org.example.comics;
 import org.example.menu.*;
 import org.example.model.Comics;
 import org.example.model.User;
+import org.example.sounds.Sound;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -78,7 +79,7 @@ public class ComicsShopLive {
                     if (choice3 == null) continue;
                     if (choice3 == 1) { //Добавление комикса в магазин
                         System.out.println(this.addComicsInShop());
-                    } else if (choice3 == 2) { //Удаление комиксса из магазина
+                    } else if (choice3 == 2) { //Удаление комикса из магазина
                         Scanner scan = new Scanner(System.in);
                         System.out.println("Введите название удаляемого комикса");
                         String str = scan.nextLine();
@@ -179,17 +180,33 @@ public class ComicsShopLive {
                         break;
                     }
                 }
-            } else if (choice == 5) {
-                Menu actionsMenu = new Menu(mainController.user, new ActionsMenu());
+            } else if (choice == 5) { // Настройка акций
+                Menu actionsMenu = new Menu(mainController.user, new StockSaleMenu());
                 while (true){
                     Integer choice6 = actionsMenu.showMenu();
                     if (choice6 == null) continue;
                     if (choice6 == 1) { //Создать акцию
-                        mainController.shop.createStockSale();
-                    } else if (choice6 == 3) {//Просмотр списска акций
-                        System.out.println(mainController.shop.showStockSales());
-                    } else if (choice6 == 4) {//Добавить комикс в акцию
+                        mainController.shop.getStock().createStockSale();
+                    } else if (choice6 == 2) {//Удалить акцию
+                        Scanner scanner = new Scanner(System.in);
+                        System.out.println("Введите название акции: ");
+                        String name = scanner.nextLine();
+                        mainController.shop.stock.deleteStockSale(name);
 
+
+                    } else if (choice6 == 3) {//Просмотр списска акций
+                        System.out.println(mainController.shop.getStock().showStockSales());
+                    } else if (choice6 == 4) {//Добавить комикс в акцию
+                        Scanner scanner = new Scanner(System.in);
+                        System.out.println("Введите название комикса");
+                        String comicsName = scanner.nextLine();
+                        System.out.println("Введите название акции");
+                        String saleName = scanner.nextLine();
+                        if (mainController.shop.addComicsInStock(comicsName, saleName) == 0) {
+                            System.out.println("Комикс успешно добавлен в акцию");
+                        } else {
+                            System.out.println("Ошибка добавления");
+                        }
                     } else if (choice6 == 0) {
                         break;
                     }
@@ -217,6 +234,8 @@ public class ComicsShopLive {
             }
         }
     }
+
+
 
     private String addComicsInShop(){
         String res = "";
@@ -305,6 +324,7 @@ public class ComicsShopLive {
     public void addTestComics(){
         mainController.shop.comicsHashMap.put(mainController.baseComics.getSpiderMan(), new ComicsData(9, LocalDate.of(2022, 10, 1), 12.0, 34.0, 12345L));
         mainController.shop.comicsHashMap.put(mainController.baseComics.getAvengers2(), new ComicsData(7, LocalDate.of(2023, 5, 23), 10.0, 53.0, 1234523L));
+        mainController.shop.comicsHashMap.put(mainController.baseComics.getBatmanEvolution(), new ComicsData(10, LocalDate.of(2023, 7, 17), 14.0, 38.0, 56354L));
     }
 
 }
