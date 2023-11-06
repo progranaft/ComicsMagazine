@@ -1,6 +1,6 @@
 package org.example.comics;
 
-import org.example.comics.stock.StockSale;
+import org.example.stock.StockSale;
 
 import java.io.Serializable;
 import java.time.LocalDate;

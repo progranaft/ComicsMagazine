@@ -1,7 +1,6 @@
-package org.example.comics.stock;
+package org.example.stock;
 
 import org.example.comics.Inputs;
-import org.example.model.Comics;
 
 import java.io.Serializable;
 import java.util.HashSet;

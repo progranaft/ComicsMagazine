@@ -1,7 +1,11 @@
 package org.example.comics;
 
-import org.example.comics.stock.Stock;
-import org.example.comics.stock.StockSale;
+import org.example.journal.SaleJournal;
+import org.example.journal.SaleRecord;
+import org.example.journal.TopAuthor;
+import org.example.journal.TopComics;
+import org.example.stock.Stock;
+import org.example.stock.StockSale;
 import org.example.model.Comics;
 import org.example.model.ComicsLegacy;
 import org.example.model.User;

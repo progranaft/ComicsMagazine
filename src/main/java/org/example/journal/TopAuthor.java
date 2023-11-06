@@ -1,4 +1,4 @@
-package org.example.comics;
+package org.example.journal;
 
 public class TopAuthor {
     private String name;

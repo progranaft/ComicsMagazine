@@ -1,4 +1,4 @@
-package org.example.comics;
+package org.example.journal;
 
 public class TopComics {
     private String name;

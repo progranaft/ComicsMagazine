@@ -1,4 +1,4 @@
-package org.example.comics;
+package org.example.journal;
 
 import org.example.model.Comics;
 import org.example.model.User;
