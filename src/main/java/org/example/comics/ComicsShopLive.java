@@ -2,8 +2,8 @@ package org.example.comics;
 
 import org.example.menu.*;
 import org.example.model.Comics;
+import org.example.model.ComicsData;
 import org.example.model.User;
-import org.example.sounds.Sound;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -137,14 +137,14 @@ public class ComicsShopLive {
                         break;
                     }
                 }
-            } else if (choice == 3) {
-
+            } else if (choice == 3) { //Список пользователей
+                System.out.println(mainController.shop.showUsersList());
             } else if (choice == 4) { //Журнал
                 Menu journalMenu = new Menu(mainController.user, new JournalMenu());
                 while (true){
                     Integer choice4 = journalMenu.showMenu();
                     if (choice4 == null) continue;
-                    if (choice4 == 1) {
+                    if (choice4 == 1) { //Журнал покупок
                         System.out.println(mainController.shop.saleJournal.toString());
                     } else if (choice4 == 2) { //Топ комиксов
                         Menu period = new Menu(mainController.user, new PeriodMenu());
@@ -192,8 +192,6 @@ public class ComicsShopLive {
                         System.out.println("Введите название акции: ");
                         String name = scanner.nextLine();
                         mainController.shop.stock.deleteStockSale(name);
-
-
                     } else if (choice6 == 3) {//Просмотр списска акций
                         System.out.println(mainController.shop.getStock().showStockSales());
                     } else if (choice6 == 4) {//Добавить комикс в акцию
@@ -275,33 +273,15 @@ public class ComicsShopLive {
                     } else if (choice3 == 4) { //Список новинок
                         System.out.println(mainController.shop.getNewComics(mainController.user));
                     } else if (choice3 == 5 ) { // Купить комикс
-
-
-
+                        if (this.deal(mainController.shop, mainController.user)){
+                            System.out.println("Комикс приобретен");
+                        }
                     } else if (choice3 == 0) { //Возврат на предыдущую старницу меню
                         break;
                     }
                 }
-            } else if (choice == 2) {
-
-
-
-            } else if (choice == 3) {
-
-
-
-            } else if (choice == 4) {
-
-
-
-            } else if (choice == 5) {
-
-
-
-            } else if (choice == 6) {
-
-
-
+            } else if (choice == 2) {//Список покупок пользователя
+                System.out.println(mainController.shop.showUsersSale(mainController.user));
             } else if (choice == 9) {
                 mainController.save();
             } else if (choice == 0) {

@@ -1,4 +1,4 @@
-package org.example.comics;
+package org.example.model;
 
 import org.example.stock.StockSale;
 

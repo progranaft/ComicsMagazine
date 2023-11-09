@@ -23,7 +23,6 @@ public class MagazineMenu implements ShowMenu {
                     "\n3. Поступления в этом месяце" +
                     "\n4. Новинки в этом месяце" +
                     "\n5. Купить комикс" +
-                    "\n6. " +
                     "\n0. Выход";
         }
 

@@ -64,4 +64,9 @@ public class SaleRecord implements Serializable {
     public void setTransactionPrice(Double transactionPrice) {
         this.transactionPrice = transactionPrice;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%20s %3s %11s %5s", this.comics.getName(), this.quantity, this.saleDate.toString(), this.transactionPrice);
+    }
 }

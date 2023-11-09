@@ -4,6 +4,7 @@ import org.example.journal.SaleJournal;
 import org.example.journal.SaleRecord;
 import org.example.journal.TopAuthor;
 import org.example.journal.TopComics;
+import org.example.model.ComicsData;
 import org.example.stock.Stock;
 import org.example.stock.StockSale;
 import org.example.model.Comics;
@@ -128,6 +129,15 @@ public class Shop implements Serializable {
         return res.toString();
     }
 
+    public String showUsersSale(User user){
+        ArrayList<SaleRecord> saleRecords = this.saleJournal.getUsersSale(user);
+        StringBuilder res = new StringBuilder();
+        for (SaleRecord saleRecord : saleRecords){
+            res.append(saleRecord.toString()).append("\n");
+        }
+        return res.toString();
+    }
+
     public void addComics(Comics comics){
         if (comicsHashMap.containsKey(comics)) {
             Integer tmp = comicsHashMap.get(comics).getQuantity();
@@ -186,10 +196,11 @@ public class Shop implements Serializable {
             }
             res.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
         } else {
+            res.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
             res.append(String.format("| %20s | %10s | %10s | %15s | %5s | %15s | %8s | %10s | %7s | %6s | %10s | %20s |\n",
                     "Название", "Жанр", "Дт. созд.", "Издательство", "Стр.", "Дизайнер", "Автор", "Дт. завоза", "MgzId", "Кол-во", "Цена/Акция", "Предистория"));
-            res.append("-------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-            for(Map.Entry<Comics, ComicsData> comic:this.comicsHashMap.entrySet()){
+            res.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+            for(Map.Entry<Comics, ComicsData> comic:comicsHashMap.entrySet()){
                 Comics tmp = comic.getKey();
                 ComicsData tmp2 = comic.getValue();
                 StringBuilder resPrice = new StringBuilder();
@@ -200,10 +211,10 @@ public class Shop implements Serializable {
                 } else {
                     resPrice.append(tmp2.getSalePrice());
                 }
-                res.append(String.format("| %20s | %10s | %10s | %12s | %5s | %8s | %8s | %10s | %7s | %6s | %10s |",
+                res.append(String.format("| %20s | %10s | %10s | %15s | %5s | %15s | %8s | %10s | %7s | %6s | %10s |",
                         tmp.getName(), tmp.getGenre(), tmp.getPublicationDate().toString(),
                         tmp.getPublishingHouse(), tmp.getPages(), tmp.getDesigner(), tmp.getAuthor(),
-                        tmp2.getDataReceipts(), tmp2.getProductId(), tmp2.getQuantity(), tmp2.getCoastPrice(), tmp2.getSalePrice()));
+                        tmp2.getDataReceipts(), tmp2.getProductId(), tmp2.getQuantity(), resPrice));
                 if (tmp instanceof ComicsLegacy) {
                     ComicsLegacy tmpLeg = (ComicsLegacy) tmp;
                     res.append(String.format(" %20s |\n", tmpLeg.getLegacy().getName()));
@@ -211,6 +222,7 @@ public class Shop implements Serializable {
                     res.append(String.format(" %20s |\n", "Нет"));
                 }
             }
+            res.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
         }
         return res.toString();
     }

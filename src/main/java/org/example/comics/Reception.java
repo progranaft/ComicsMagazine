@@ -29,7 +29,7 @@ public class Reception implements Serializable {
         User res = new User();
         while(true) {
             System.out.println("Добро пожаловать в Магазин Комиксов!");
-            Menu recMenu = new Menu(res, (user)->"1. Вход\n2. Регистрация\n3. О программе\n4. Выход");
+            Menu recMenu = new Menu(res, (user)->"1. Вход\n2. Регистрация\n3. О программе\n0. Выход");
             Integer choice = recMenu.showMenu();
             if (choice == null) continue;
             if (choice == 1) {
@@ -45,16 +45,26 @@ public class Reception implements Serializable {
                 Scanner scanner = new Scanner(System.in);
                 System.out.println("Введите имя пользователя: ");
                 String name = scanner.nextLine();
-                System.out.println("Задайте пароль: ");
-                String pass = scanner.nextLine();
-                System.out.println("Повторите пароль: ");
-                String pass2 = scanner.nextLine();
-                if (pass.equals(pass2)) {
-                    this.accounts.put(new User(name), pass);
-                    System.out.println("Пользователь добавлен");
-                    mainController.saveUsersFile();
+                boolean contains = false;
+                for (Map.Entry<User, String> item : this.accounts.entrySet()){
+                    if (item.getKey().getName().equals(name)){
+                        contains = true;
+                    }
+                }
+                if (!contains) {
+                    System.out.println("Задайте пароль: ");
+                    String pass = scanner.nextLine();
+                    System.out.println("Повторите пароль: ");
+                    String pass2 = scanner.nextLine();
+                    if (pass.equals(pass2)) {
+                        this.accounts.put(new User(name), pass);
+                        System.out.println("Пользователь добавлен");
+                        mainController.saveUsersFile();
+                    } else {
+                        System.out.println("Пароли не совпадают");
+                    }
                 } else {
-                    System.out.println("Пароли не совпадают");
+                    System.out.println("Аккаунт с таким именем уже существует");
                 }
             } else if (choice == 3) {
                 mainController.soundBuffer.getBackGround().stopPlay();
@@ -79,7 +89,7 @@ public class Reception implements Serializable {
                 String str = scanner.nextLine();
                 mainController.soundBuffer.getIntro().stopPlay();
                 mainController.soundBuffer.getBackGround().startPlay();
-            } else if (choice == 4) {
+            } else if (choice == 0) {
                 return null;
             }
         }

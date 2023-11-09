@@ -6,6 +6,7 @@ import org.example.model.User;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SaleJournal implements Serializable {
 
@@ -26,6 +27,16 @@ public class SaleJournal implements Serializable {
 
     public void setSaleRecords(ArrayList<SaleRecord> saleRecords) {
         this.saleRecords = saleRecords;
+    }
+
+    public ArrayList<SaleRecord> getUsersSale(User user){
+        ArrayList<SaleRecord> saleRecords1 = new ArrayList<>();
+        for (SaleRecord item : this.saleRecords){
+            if (item.getUser().equals(user)){
+                saleRecords1.add(item);
+            }
+        }
+        return saleRecords1;
     }
 
     @Override

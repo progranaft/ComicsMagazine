@@ -10,10 +10,6 @@ public class JournalMenu implements ShowMenu {
             str += "\n1. Просмотр журнала" +
                     "\n2. Топ продаж" +
                     "\n3. Тов авторов" +
-                    "\n4. " +
-                    "\n5. " +
-                    "\n6. " +
-                    "\n7. " +
                     "\n0. Выход";
         } else {
 
