@@ -15,7 +15,6 @@ public class Inputs {
                 break;
             } catch (Exception ex) {
                 System.out.println("Ошибка ввода, введите число!");
-                break;
             }
         }
         return number;
