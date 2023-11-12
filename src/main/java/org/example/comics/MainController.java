@@ -1,7 +1,6 @@
 package org.example.comics;
 
 import org.example.model.User;
-import org.example.sounds.Sound;
 import org.example.sounds.SoundBuffer;
 
 import java.io.*;
@@ -32,7 +31,7 @@ public class MainController {
                 break;
             }
             this.shop.users.add(this.user);
-            ComicsShopLive csl = new ComicsShopLive(this);
+            ComicsShopController csl = new ComicsShopController(this);
             csl.go();
         }
     }

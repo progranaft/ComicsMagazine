@@ -29,6 +29,27 @@ public class Shop implements Serializable {
         this.money = 0.;
     }
 
+    public void postponeComics(Comics comics, Integer quantity, User user){
+        if (comics != null && user != null) {
+            user.getDeferredComics().put(comics, quantity);
+            if (this.comicsHashMap.get(comics).getQuantity() > quantity) {
+                this.comicsHashMap.get(comics).setQuantity(this.comicsHashMap.get(comics).getQuantity() - quantity);
+            } else if (this.comicsHashMap.get(comics).getQuantity() == quantity) {
+                this.comicsHashMap.remove(comics);
+            }
+        }
+    }
+
+    public String getPostponeComics(User user){
+        StringBuilder res = new StringBuilder();
+        for (User item : this.users){
+            if (user.equals(item)){
+                res.append(item.toString());
+            }
+        }
+        return res.toString();
+    }
+
     public int addComicsInStock(String comicsName, String stockSaleName) {
         Map.Entry<Comics, ComicsData> comics = getComics(comicsName);
         StockSale stockSale = stock.getStockSale(stockSaleName);
@@ -177,7 +198,6 @@ public class Shop implements Serializable {
                 ComicsData tmp2 = comic.getValue();
                 StringBuilder resPrice = new StringBuilder();
                 if (tmp2.getStockSale() != null && LocalDate.now().isAfter(tmp2.getStockSale().getStartActions()) && LocalDate.now().isBefore(tmp2.getStockSale().getEndActions())) {
-                    //Double result = tmp2.getSalePrice()*(1-tmp2.stockSale.getDiscount());
                     resPrice.append(tmp2.getSalePrice()).append("/");
                     resPrice.append(String.format("%.2f", tmp2.getStockSalePrice()));
                 } else {
@@ -205,7 +225,6 @@ public class Shop implements Serializable {
                 ComicsData tmp2 = comic.getValue();
                 StringBuilder resPrice = new StringBuilder();
                 if (tmp2.getStockSale() != null && LocalDate.now().isAfter(tmp2.getStockSale().getStartActions()) && LocalDate.now().isBefore(tmp2.getStockSale().getEndActions())) {
-                    //Double result = tmp2.getSalePrice()*(1-tmp2.stockSale.getDiscount());
                     resPrice.append(tmp2.getSalePrice()).append("/");
                     resPrice.append(String.format("%.2f", tmp2.getStockSalePrice()));
                 } else {
@@ -255,12 +274,14 @@ public class Shop implements Serializable {
         }
     }
 
-    public HashSet<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(HashSet<User> users) {
-        this.users = users;
+    public User getUser(String name){
+        User res = null;
+        for (User user : this.users){
+            if (user.getName().equals(name)){
+                res = user;
+            }
+        }
+        return res;
     }
 
     public HashMap<Comics, ComicsData> searchComicsName(String name){

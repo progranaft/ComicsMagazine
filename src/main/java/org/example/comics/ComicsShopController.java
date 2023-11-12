@@ -9,9 +9,9 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.Scanner;
 
-public class ComicsShopLive {
+public class ComicsShopController {
     MainController mainController;
-    public ComicsShopLive(MainController mainController){
+    public ComicsShopController(MainController mainController){
         this.mainController = mainController;
     }
 
@@ -66,6 +66,25 @@ public class ComicsShopLive {
         return true;
     }
 
+    public String postponeDeal(String comicsName, Integer quantity, String userName){
+        StringBuilder res = new StringBuilder();
+        Map.Entry<Comics, ComicsData> comicsEntry = mainController.shop.getComics(comicsName);
+        User user = mainController.shop.getUser(userName);
+        if (comicsEntry != null && user != null) {
+            if (comicsEntry.getValue().getQuantity() >= quantity){
+                mainController.shop.postponeComics(comicsEntry.getKey(), quantity, user);
+                res.append("Комикс успешно отложен");
+            } else {
+                res.append("В магазине нет столько комиксов");
+            }
+        } else if (comicsEntry == null) {
+            res.append("Комикс не найден");
+        } else if (user == null) {
+            res.append("Пользователь не найден");
+        }
+        return res.toString();
+    }
+
     public void goAdmin(){
         //Админская менюшка
         Menu menu = new Menu(mainController.user , new MainMenu());
@@ -102,6 +121,15 @@ public class ComicsShopLive {
                         if (this.deal(mainController.shop, mainController.user)){
                             System.out.println("Комикс приобретен");
                         }
+                    } else if (choice3 == 8) { //Отложить комикс
+                        Scanner scanner = new Scanner(System.in);
+                        System.out.println("Введите название комикса: ");
+                        String comicsName = scanner.nextLine();
+                        System.out.println("Введите количество: ");
+                        Integer count = Inputs.inputInt();
+                        System.out.println("Введите имя покупателя: ");
+                        String userName = scanner.nextLine();
+                        System.out.println(this.postponeDeal(comicsName, count, userName));
                     } else if (choice3 == 0) { //Возврат на предыдущую старницу меню
                         break;
                     }
@@ -282,6 +310,8 @@ public class ComicsShopLive {
                 }
             } else if (choice == 2) {//Список покупок пользователя
                 System.out.println(mainController.shop.showUsersSale(mainController.user));
+            } else if (choice == 3) {//Отложенные комиксы
+                System.out.println(mainController.shop.getPostponeComics(mainController.user));
             } else if (choice == 9) {
                 mainController.save();
             } else if (choice == 0) {
